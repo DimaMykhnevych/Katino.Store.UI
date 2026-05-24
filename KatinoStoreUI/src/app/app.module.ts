@@ -12,6 +12,8 @@ import { CoreModule } from './core/core.module';
 import { DateAdapter } from '@angular/material/core';
 import { AppDateAdapter } from './core/adapters/app-date-adapter';
 import { MaterialModule } from './layout/material';
+import { NavbarModule } from './layout/navbar/navbar.module';
+import { MainPageModule } from './features/main-page/main-page.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,6 +33,8 @@ import { MaterialModule } from './layout/material';
     }),
     ToastrModule.forRoot(),
     CoreModule,
+    NavbarModule,
+    MainPageModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'uk' },
