@@ -1,0 +1,20 @@
+// ===== KATINO Typography =====
+
+$font-heading: 'Lexend', 'Helvetica Neue', sans-serif;
+$font-body:    'Lato', 'Helvetica Neue', sans-serif;
+
+// ===== KATINO Brand Colors =====
+
+$color-dark-charcoal: #2F2D2E;
+$color-white:         #FFFFFF;
+$color-navy:          #1A3A6B;
+$color-orange:        #EB8125;
+$color-beige:         #A58F78;
+
+:root {
+  --color-dark-charcoal: #{$color-dark-charcoal};
+  --color-white:         #{$color-white};
+  --color-navy:          #{$color-navy};
+  --color-orange:        #{$color-orange};
+  --color-beige:         #{$color-beige};
+}

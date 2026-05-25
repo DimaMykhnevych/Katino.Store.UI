@@ -1,4 +1,105 @@
-<p>navbar works!</p>
+<nav class="katino-navbar">
+  <div class="navbar-inner container-fluid">
+    <a routerLink="/" class="navbar-brand">
+      <img src="assets/images/logo.webp" alt="KATINO" class="brand-logo" />
+      <span class="brand-name">KATINO</span>
+    </a>
+
+    <ul class="nav-links d-none d-lg-flex">
+      <li>
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link"
+        >
+          {{ "navbar.home" | translate }}
+        </a>
+      </li>
+    </ul>
+
+    <div class="navbar-right d-none d-lg-flex">
+      <div class="search-box">
+        <mat-icon>search</mat-icon>
+        <input
+          type="text"
+          class="search-input"
+          [placeholder]="'navbar.searchPlaceholder' | translate"
+        />
+      </div>
+
+      <div class="lang-selector">
+        <button
+          class="lang-btn"
+          [class.active]="currentLanguage === uaLang"
+          (click)="setLanguage(uaLang)"
+        >
+          {{ "languageSelection.ua" | translate }}
+        </button>
+        <span class="lang-divider">|</span>
+        <button
+          class="lang-btn"
+          [class.active]="currentLanguage === enLang"
+          (click)="setLanguage(enLang)"
+        >
+          {{ "languageSelection.en" | translate }}
+        </button>
+      </div>
+    </div>
+
+    <button
+      class="mobile-toggle d-flex d-lg-none"
+      (click)="toggleMobileMenu()"
+      [attr.aria-label]="'navbar.toggleMenu' | translate"
+      [attr.aria-expanded]="mobileMenuOpen"
+    >
+      <mat-icon>{{ mobileMenuOpen ? "close" : "menu" }}</mat-icon>
+    </button>
+  </div>
+
+  <div class="mobile-menu" [class.open]="mobileMenuOpen">
+    <div class="mobile-search">
+      <mat-icon>search</mat-icon>
+      <input
+        type="text"
+        class="search-input"
+        [placeholder]="'navbar.searchPlaceholder' | translate"
+      />
+    </div>
+
+    <ul class="mobile-nav-links">
+      <li>
+        <a
+          routerLink="/"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="mobile-nav-link"
+          (click)="mobileMenuOpen = false"
+        >
+          {{ "navbar.home" | translate }}
+        </a>
+      </li>
+    </ul>
+
+    <div class="mobile-lang-selector">
+      <button
+        class="lang-btn"
+        [class.active]="currentLanguage === uaLang"
+        (click)="setLanguage(uaLang)"
+      >
+        {{ "languageSelection.ua" | translate }}
+      </button>
+      <span class="lang-divider">|</span>
+      <button
+        class="lang-btn"
+        [class.active]="currentLanguage === enLang"
+        (click)="setLanguage(enLang)"
+      >
+        {{ "languageSelection.en" | translate }}
+      </button>
+    </div>
+  </div>
+</nav>
 
 <div class="content-wrapper">
   <router-outlet></router-outlet>

@@ -2,5 +2,10 @@
   "languageSelection": {
     "ua": "Укр",
     "en": "En"
-  }    
+  },
+  "navbar": {
+    "home": "Головна",
+    "searchPlaceholder": "Пошук...",
+    "toggleMenu": "Відкрити меню"
+  }
 }

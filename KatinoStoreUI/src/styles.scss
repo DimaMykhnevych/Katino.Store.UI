@@ -1,6 +1,12 @@
-/* You can add global styles to this file, and also import other style files */
-@import "~bootstrap/scss/bootstrap";
-@import "~ngx-toastr/toastr";
-// *{border: 1px solid red;}
+@import 'theme/variables';
+@import 'theme/material-theme';
+@import '~bootstrap/scss/bootstrap';
+@import '~ngx-toastr/toastr';
+
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: $font-body; color: $color-dark-charcoal; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-heading;
+  color: $color-dark-charcoal;
+}

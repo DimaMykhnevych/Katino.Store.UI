@@ -2,5 +2,10 @@
   "languageSelection": {
     "ua": "Ua",
     "en": "En"
-  }    
+  },
+  "navbar": {
+    "home": "Home",
+    "searchPlaceholder": "Search...",
+    "toggleMenu": "Toggle menu"
+  }
 }

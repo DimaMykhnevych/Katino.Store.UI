@@ -1,0 +1,92 @@
+@import '~@angular/material/theming';
+@import 'theme/variables';
+
+$katino-typography: mat-typography-config(
+  $font-family:   $font-body,
+  $headline:      mat-typography-level(2rem,   2.5rem, 700, $font-heading),
+  $title:         mat-typography-level(1.5rem, 2rem,   600, $font-heading),
+  $subheading-2:  mat-typography-level(1.125rem, 1.75rem, 400, $font-heading),
+  $subheading-1:  mat-typography-level(1rem,   1.5rem, 400, $font-heading),
+  $body-1:        mat-typography-level(0.9375rem, 1.5rem, 400, $font-body),
+  $body-2:        mat-typography-level(0.9375rem, 1.5rem, 500, $font-body),
+  $caption:       mat-typography-level(0.75rem, 1.25rem, 400, $font-body),
+  $button:        mat-typography-level(0.875rem, 1rem,  500, $font-body),
+);
+
+@include mat-core($katino-typography);
+
+// Navy palette (#1A3A6B as 500)
+$katino-navy-palette: (
+  50:   #e8edf7,
+  100:  #c6d2ec,
+  200:  #a1b5de,
+  300:  #7b97cf,
+  400:  #5f80c3,
+  500:  #1A3A6B,
+  600:  #173364,
+  700:  #142b5a,
+  800:  #10234f,
+  900:  #081539,
+  A100: #a0beff,
+  A200: #6d9fff,
+  A400: #3a7fff,
+  A700: #2271ff,
+  contrast: (
+    50:   rgba(0, 0, 0, 0.87),
+    100:  rgba(0, 0, 0, 0.87),
+    200:  rgba(0, 0, 0, 0.87),
+    300:  rgba(0, 0, 0, 0.87),
+    400:  #ffffff,
+    500:  #ffffff,
+    600:  #ffffff,
+    700:  #ffffff,
+    800:  #ffffff,
+    900:  #ffffff,
+    A100: rgba(0, 0, 0, 0.87),
+    A200: rgba(0, 0, 0, 0.87),
+    A400: #ffffff,
+    A700: #ffffff,
+  ),
+);
+
+// Orange palette (#EB8125 as 500)
+$katino-orange-palette: (
+  50:   #fdf3e5,
+  100:  #f9deba,
+  200:  #f5c88e,
+  300:  #f0b163,
+  400:  #ec9c43,
+  500:  #EB8125,
+  600:  #e7771f,
+  700:  #e36a18,
+  800:  #df5f10,
+  900:  #d74b05,
+  A100: #ffeacc,
+  A200: #ffd199,
+  A400: #ffb24a,
+  A700: #ffa220,
+  contrast: (
+    50:   rgba(0, 0, 0, 0.87),
+    100:  rgba(0, 0, 0, 0.87),
+    200:  rgba(0, 0, 0, 0.87),
+    300:  rgba(0, 0, 0, 0.87),
+    400:  rgba(0, 0, 0, 0.87),
+    500:  rgba(0, 0, 0, 0.87),
+    600:  rgba(0, 0, 0, 0.87),
+    700:  #ffffff,
+    800:  #ffffff,
+    900:  #ffffff,
+    A100: rgba(0, 0, 0, 0.87),
+    A200: rgba(0, 0, 0, 0.87),
+    A400: rgba(0, 0, 0, 0.87),
+    A700: rgba(0, 0, 0, 0.87),
+  ),
+);
+
+$katino-primary: mat-palette($katino-navy-palette);
+$katino-accent:  mat-palette($katino-orange-palette, 500, 400, 700);
+$katino-warn:    mat-palette($mat-red);
+
+$katino-theme: mat-light-theme($katino-primary, $katino-accent, $katino-warn);
+
+@include angular-material-theme($katino-theme);

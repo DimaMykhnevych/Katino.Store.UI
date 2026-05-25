@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { LanguageConstants } from './core/constants/language-constants';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,10 @@ export class AppComponent implements OnInit {
   constructor(private _translate: TranslateService) {}
 
   public ngOnInit() {
-    let lang = localStorage.getItem('language');
+    let lang = localStorage.getItem(LanguageConstants.LanguageLocalStorageKey);
     if (lang === null) {
-      lang = 'ua';
-      localStorage.setItem('language', lang);
+      lang = LanguageConstants.UaLang;
+      localStorage.setItem(LanguageConstants.LanguageLocalStorageKey, lang);
     }
 
     this._translate.setDefaultLang(lang);
