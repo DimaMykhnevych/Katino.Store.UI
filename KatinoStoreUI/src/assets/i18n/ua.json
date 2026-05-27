@@ -5,7 +5,10 @@
   },
   "navbar": {
     "home": "Головна",
-    "searchPlaceholder": "Пошук...",
+    "searchPlaceholder": "Пошук (назва/артикул)...",
     "toggleMenu": "Відкрити меню"
+  },
+  "products": {
+    "noResults": "Товарів не знайдено"
   }
 }

@@ -99,6 +99,7 @@ $navbar-height: 68px;
       width: 1.125rem;
       height: 1.125rem;
       line-height: 1.125rem;
+      cursor: pointer;
     }
 
     .search-input {
@@ -197,6 +198,7 @@ $navbar-height: 68px;
       mat-icon {
         color: $color-beige;
         flex-shrink: 0;
+        cursor: pointer;
       }
 
       .search-input {

@@ -1,0 +1,19 @@
+<div class="product-card">
+  <div class="product-image-wrapper">
+    <img
+      class="product-image"
+      [src]="product.photoUrl || placeholderUrl"
+      [alt]="product.name"
+      (error)="onImageError($event)"
+    />
+  </div>
+  <div class="product-info">
+    <div class="product-name-row">
+      <span class="product-name">{{ product.name }}</span>
+      <!-- <button mat-icon-button class="wishlist-btn" aria-label="wishlist">
+        <mat-icon>favorite_border</mat-icon>
+      </button> -->
+    </div>
+    <p class="product-price">{{ product.price }} ₴</p>
+  </div>
+</div>

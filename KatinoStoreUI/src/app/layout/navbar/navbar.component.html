@@ -20,11 +20,15 @@
 
     <div class="navbar-right d-none d-lg-flex">
       <div class="search-box">
-        <mat-icon>search</mat-icon>
+        <mat-icon class="search-icon" (click)="onSearch(desktopSearch.value)">search</mat-icon>
         <input
+          #desktopSearch
           type="text"
           class="search-input"
           [placeholder]="'navbar.searchPlaceholder' | translate"
+          [value]="searchQuery"
+          (input)="onInput(desktopSearch.value)"
+          (keyup.enter)="onSearch(desktopSearch.value)"
         />
       </div>
 
@@ -59,11 +63,15 @@
 
   <div class="mobile-menu" [class.open]="mobileMenuOpen">
     <div class="mobile-search">
-      <mat-icon>search</mat-icon>
+      <mat-icon class="search-icon" (click)="onSearch(mobileSearch.value)">search</mat-icon>
       <input
+        #mobileSearch
         type="text"
         class="search-input"
         [placeholder]="'navbar.searchPlaceholder' | translate"
+        [value]="searchQuery"
+        (input)="onInput(mobileSearch.value)"
+        (keyup.enter)="onSearch(mobileSearch.value)"
       />
     </div>
 

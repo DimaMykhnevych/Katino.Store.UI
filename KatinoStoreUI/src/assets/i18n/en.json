@@ -5,7 +5,10 @@
   },
   "navbar": {
     "home": "Home",
-    "searchPlaceholder": "Search...",
+    "searchPlaceholder": "Search (name/article)...",
     "toggleMenu": "Toggle menu"
+  },
+  "products": {
+    "noResults": "No products found"
   }
 }
