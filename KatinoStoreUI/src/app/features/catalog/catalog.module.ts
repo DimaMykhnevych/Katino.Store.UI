@@ -5,11 +5,11 @@ import { MaterialModule } from 'src/app/layout/material';
 import { CoreModule } from 'src/app/core/core.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedFeaturesModule } from '../shared/shared-features.module';
-import { MainPageComponent } from './main-page.component';
-import { ProductListComponent } from './components/product-list/product-list.component';
+import { CatalogComponent } from './catalog.component';
+import { CatalogProductListComponent } from './components/product-list/product-list.component';
 
 @NgModule({
-  declarations: [MainPageComponent, ProductListComponent],
+  declarations: [CatalogComponent, CatalogProductListComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -19,4 +19,4 @@ import { ProductListComponent } from './components/product-list/product-list.com
     SharedFeaturesModule,
   ],
 })
-export class MainPageModule {}
+export class CatalogModule {}

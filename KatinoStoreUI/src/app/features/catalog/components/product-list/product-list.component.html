@@ -3,7 +3,11 @@
     <mat-progress-spinner mode="indeterminate" [diameter]="52"></mat-progress-spinner>
   </div>
 
-  <div class="products-wrapper" *ngIf="!isLoading">
+  <div class="products-wrapper" *ngIf="!isLoading" [class.reloading]="isReloading">
+    <div class="reload-overlay" *ngIf="isReloading">
+      <mat-progress-spinner mode="indeterminate" [diameter]="48"></mat-progress-spinner>
+    </div>
+
     <div *ngIf="products.length === 0" class="no-results">
       {{ 'products.noResults' | translate }}
     </div>
@@ -16,5 +20,11 @@
         <app-product-card [product]="product"></app-product-card>
       </div>
     </div>
+
+    <app-pagination
+      [totalPages]="totalPages"
+      [pageIndex]="pageIndex"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
   </div>
 </div>

@@ -5,8 +5,12 @@
   },
   "navbar": {
     "home": "Home",
+    "catalog": "Catalog",
     "searchPlaceholder": "Search (name/article)...",
     "toggleMenu": "Toggle menu"
+  },
+  "mainPage": {
+    "showAllProducts": "Show all products"
   },
   "products": {
     "noResults": "No products found"

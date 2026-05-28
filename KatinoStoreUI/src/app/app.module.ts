@@ -14,6 +14,8 @@ import { AppDateAdapter } from './core/adapters/app-date-adapter';
 import { MaterialModule } from './layout/material';
 import { NavbarModule } from './layout/navbar/navbar.module';
 import { MainPageModule } from './features/main-page/main-page.module';
+import { CatalogModule } from './features/catalog/catalog.module';
+import { SharedFeaturesModule } from './features/shared/shared-features.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,6 +37,8 @@ import { MainPageModule } from './features/main-page/main-page.module';
     CoreModule,
     NavbarModule,
     MainPageModule,
+    CatalogModule,
+    SharedFeaturesModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'uk' },

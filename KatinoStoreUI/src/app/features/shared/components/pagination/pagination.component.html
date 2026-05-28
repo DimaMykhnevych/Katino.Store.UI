@@ -1,0 +1,29 @@
+<div class="pagination" *ngIf="totalPages > 1">
+  <button
+    class="page-btn nav-btn"
+    [disabled]="pageIndex === 0"
+    (click)="goToPage(pageIndex - 1)"
+  >
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <ng-container *ngFor="let page of visiblePages">
+    <span *ngIf="isEllipsis(page)" class="page-ellipsis">...</span>
+    <button
+      *ngIf="!isEllipsis(page)"
+      class="page-btn"
+      [class.active]="page === pageIndex + 1"
+      (click)="goToPage(+page - 1)"
+    >
+      {{ page }}
+    </button>
+  </ng-container>
+
+  <button
+    class="page-btn nav-btn"
+    [disabled]="pageIndex === totalPages - 1"
+    (click)="goToPage(pageIndex + 1)"
+  >
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+</div>

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { MainPageComponent } from './features/main-page/main-page.component';
+import { CatalogComponent } from './features/catalog/catalog.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
       {
         path: 'main',
         component: MainPageComponent,
+      },
+      {
+        path: 'catalog',
+        component: CatalogComponent,
       },
     ],
   },

@@ -81,7 +81,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   private navigate(query: string): void {
-    this._router.navigate(['/main'], {
+    this._router.navigate(['/catalog'], {
       queryParams: { search: query || null },
     });
   }

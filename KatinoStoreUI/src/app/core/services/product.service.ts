@@ -5,6 +5,7 @@ import { AppSettings } from 'src/app/core/settings';
 import { GetProductsRequest } from '../models/product/get-products-request';
 import { GetProductsResponse } from '../models/product/get-products-response';
 import { convertToHttpParams } from '../http/request/http-params.util';
+import { ProductListItem } from '../models/product/product-list-item';
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +13,7 @@ import { convertToHttpParams } from '../http/request/http-params.util';
 export class ProductService {
   constructor(private _http: HttpClient) {}
 
-  public getProductsForMainPage(
+  public getProductCards(
     request: GetProductsRequest,
   ): Observable<GetProductsResponse> {
     const httpParams: HttpParams =
@@ -22,6 +23,12 @@ export class ProductService {
       {
         params: httpParams,
       },
+    );
+  }
+
+  public getNewestProducts(): Observable<ProductListItem[]> {
+    return this._http.get<ProductListItem[]>(
+      `${AppSettings.apiHost}/Product/recent`,
     );
   }
 }

@@ -1,1 +1,7 @@
-<app-product-list [search]="search"></app-product-list>
+<app-product-list (loaded)="isProductsLoaded = true"></app-product-list>
+
+<div class="show-all-wrapper container" *ngIf="isProductsLoaded">
+  <a routerLink="/catalog" class="show-all-btn">
+    {{ 'mainPage.showAllProducts' | translate }}
+  </a>
+</div>

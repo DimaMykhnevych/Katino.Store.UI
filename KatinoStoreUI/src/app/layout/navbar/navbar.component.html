@@ -8,12 +8,21 @@
     <ul class="nav-links d-none d-lg-flex">
       <li>
         <a
-          routerLink="/"
+          routerLink="/main"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           class="nav-link"
         >
           {{ "navbar.home" | translate }}
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/catalog"
+          routerLinkActive="active"
+          class="nav-link"
+        >
+          {{ "navbar.catalog" | translate }}
         </a>
       </li>
     </ul>
@@ -78,13 +87,23 @@
     <ul class="mobile-nav-links">
       <li>
         <a
-          routerLink="/"
+          routerLink="/main"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
           class="mobile-nav-link"
           (click)="mobileMenuOpen = false"
         >
           {{ "navbar.home" | translate }}
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/catalog"
+          routerLinkActive="active"
+          class="mobile-nav-link"
+          (click)="mobileMenuOpen = false"
+        >
+          {{ "navbar.catalog" | translate }}
         </a>
       </li>
     </ul>
