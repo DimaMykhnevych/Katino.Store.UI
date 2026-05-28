@@ -1,3 +1,5 @@
+import { ProductColor } from './product-color';
+
 export interface ProductListItem {
   id: string;
   name: string;
@@ -5,4 +7,5 @@ export interface ProductListItem {
   categoryId: string;
   price: number;
   photoUrl: string;
+  colors: ProductColor[];
 }

@@ -8,9 +8,17 @@
     />
   </div>
   <div class="product-info">
-    <div class="product-name-row">
+    <div class="product-info-main">
       <span class="product-name">{{ product.name }}</span>
+      <p class="product-price">{{ product.price }} ₴</p>
     </div>
-    <p class="product-price">{{ product.price }} ₴</p>
+    <div class="product-colors" *ngIf="product.colors.length">
+      <span
+        class="color-dot"
+        *ngFor="let color of product.colors"
+        [style.background-color]="color.hexCode"
+        [title]="color.name"
+      ></span>
+    </div>
   </div>
 </div>
