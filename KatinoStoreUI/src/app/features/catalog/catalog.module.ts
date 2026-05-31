@@ -5,6 +5,7 @@ import { MaterialModule } from 'src/app/layout/material';
 import { CoreModule } from 'src/app/core/core.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { SharedFeaturesModule } from '../shared/shared-features.module';
+import { SpinnerModule } from 'src/app/layout/spinner/spinner.module';
 import { CatalogComponent } from './catalog.component';
 import { CatalogProductListComponent } from './components/product-list/product-list.component';
 
@@ -17,6 +18,7 @@ import { CatalogProductListComponent } from './components/product-list/product-l
     CoreModule,
     TranslateModule,
     SharedFeaturesModule,
+    SpinnerModule,
   ],
 })
 export class CatalogModule {}

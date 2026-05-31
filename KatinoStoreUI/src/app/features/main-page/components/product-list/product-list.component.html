@@ -1,11 +1,11 @@
 <div class="product-list-container container">
   <div *ngIf="isLoading" class="initial-loading">
-    <mat-progress-spinner mode="indeterminate" [diameter]="52"></mat-progress-spinner>
+    <app-logo-spinner></app-logo-spinner>
   </div>
 
   <div class="products-wrapper" *ngIf="!isLoading">
     <div *ngIf="products.length === 0" class="no-results">
-      {{ 'products.noResults' | translate }}
+      {{ "products.noResults" | translate }}
     </div>
 
     <div

@@ -7,6 +7,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { SharedFeaturesModule } from '../shared/shared-features.module';
 import { MainPageComponent } from './main-page.component';
 import { ProductListComponent } from './components/product-list/product-list.component';
+import { SpinnerModule } from 'src/app/layout/spinner/spinner.module';
 
 @NgModule({
   declarations: [MainPageComponent, ProductListComponent],
@@ -17,6 +18,7 @@ import { ProductListComponent } from './components/product-list/product-list.com
     CoreModule,
     TranslateModule,
     SharedFeaturesModule,
+    SpinnerModule,
   ],
 })
 export class MainPageModule {}
