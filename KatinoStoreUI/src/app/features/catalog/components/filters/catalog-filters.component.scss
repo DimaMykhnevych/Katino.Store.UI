@@ -1,0 +1,19 @@
+@import 'theme/variables';
+
+.filters-panel {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.07);
+
+  ::ng-deep .mat-expansion-panel {
+    box-shadow: none;
+  }
+
+  ::ng-deep .mat-expansion-panel-header-title {
+    font-weight: 600;
+    color: $color-dark-charcoal;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+}

@@ -14,5 +14,11 @@
   },
   "products": {
     "noResults": "No products found"
+  },
+  "catalog": {
+    "filters": {
+      "title": "Filters",
+      "categories": "Categories"
+    }
   }
 }

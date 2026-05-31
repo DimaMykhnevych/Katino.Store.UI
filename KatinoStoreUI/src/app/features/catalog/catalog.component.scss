@@ -1,0 +1,46 @@
+@import 'theme/variables';
+
+.catalog-layout {
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+
+.filter-toggle-bar {
+  display: flex;
+  margin-bottom: 12px;
+
+  @media (min-width: 992px) {
+    display: none;
+  }
+}
+
+.filter-toggle-btn {
+  color: $color-navy;
+  border-color: $color-navy;
+
+  mat-icon {
+    margin-right: 6px;
+    font-size: 1.1rem;
+    height: 1.1rem;
+    width: 1.1rem;
+  }
+}
+
+.filters-sidebar {
+  display: none;
+  margin-bottom: 16px;
+
+  &.open {
+    display: block;
+  }
+
+  @media (min-width: 992px) {
+    display: block;
+    margin-bottom: 0;
+    position: sticky;
+    top: 80px;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+    align-self: flex-start;
+  }
+}

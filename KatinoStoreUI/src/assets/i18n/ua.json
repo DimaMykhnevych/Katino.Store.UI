@@ -14,5 +14,11 @@
   },
   "products": {
     "noResults": "Товарів не знайдено"
+  },
+  "catalog": {
+    "filters": {
+      "title": "Фільтри",
+      "categories": "Категорії"
+    }
   }
 }

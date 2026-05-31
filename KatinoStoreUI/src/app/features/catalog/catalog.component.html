@@ -1,1 +1,23 @@
-<app-catalog-product-list [search]="search"></app-catalog-product-list>
+<div class="catalog-layout container-fluid">
+  <div class="row">
+
+    <div class="col-12 filter-toggle-bar">
+      <button mat-stroked-button class="filter-toggle-btn" (click)="isFilterOpen = !isFilterOpen">
+        <mat-icon>{{ isFilterOpen ? 'close' : 'filter_list' }}</mat-icon>
+        {{ 'catalog.filters.title' | translate }}
+      </button>
+    </div>
+
+    <div class="col-12 col-lg-3 filters-sidebar" [class.open]="isFilterOpen">
+      <app-catalog-filters (filtersChange)="onFiltersChange($event)"></app-catalog-filters>
+    </div>
+
+    <div class="col-12 col-lg-9">
+      <app-catalog-product-list
+        [search]="search"
+        [filters]="filters"
+      ></app-catalog-product-list>
+    </div>
+
+  </div>
+</div>

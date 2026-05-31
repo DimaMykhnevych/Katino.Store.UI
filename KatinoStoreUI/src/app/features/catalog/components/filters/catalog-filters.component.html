@@ -1,0 +1,12 @@
+<div class="filters-panel">
+  <mat-accordion [multi]="true">
+
+    <mat-expansion-panel expanded>
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ 'catalog.filters.categories' | translate }}</mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-category-filter (filterChange)="onCategoryFilterChange($event)"></app-category-filter>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</div>

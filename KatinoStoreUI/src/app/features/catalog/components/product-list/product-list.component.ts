@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { CatalogFilters } from 'src/app/core/models/catalog/catalog-filters';
 import { GetProductsRequest } from 'src/app/core/models/product/get-products-request';
 import { ProductListItem } from 'src/app/core/models/product/product-list-item';
 import { ProductService } from 'src/app/core/services/product.service';
@@ -10,6 +11,7 @@ import { ProductService } from 'src/app/core/services/product.service';
 })
 export class CatalogProductListComponent implements OnInit, OnChanges {
   @Input() search: string = '';
+  @Input() filters: CatalogFilters = { categoryIds: [] };
 
   public products: ProductListItem[] = [];
   public totalCount: number = 0;
@@ -27,7 +29,10 @@ export class CatalogProductListComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['search'] && !changes['search'].firstChange) {
+    const searchChanged = changes['search'] && !changes['search'].firstChange;
+    const filtersChanged = changes['filters'] && !changes['filters'].firstChange;
+
+    if (searchChanged || filtersChanged) {
       this.pageIndex = 0;
       this.loadProducts();
     }
@@ -53,6 +58,7 @@ export class CatalogProductListComponent implements OnInit, OnChanges {
       search: this.search || undefined,
       page: this.pageIndex + 1,
       pageSize: this.pageSize,
+      categoryIds: this.filters.categoryIds,
     };
 
     this._productService.getProductCards(request).subscribe({
