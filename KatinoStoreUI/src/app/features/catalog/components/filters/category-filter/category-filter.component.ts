@@ -1,5 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { CatalogFilters } from 'src/app/core/models/catalog/catalog-filters';
 import { CategoryListItem } from 'src/app/core/models/category/category-list-item';
 import { CategoryService } from 'src/app/core/services/category.service';
 
@@ -9,10 +10,11 @@ import { CategoryService } from 'src/app/core/services/category.service';
   styleUrls: ['./category-filter.component.scss'],
 })
 export class CategoryFilterComponent implements OnInit, OnDestroy {
-  @Output() filterChange = new EventEmitter<string[]>();
+  @Output() filterChange = new EventEmitter<CatalogFilters>();
 
   public categories: CategoryListItem[] = [];
   public isLoading: boolean = false;
+  public isSaleSelected: boolean = false;
 
   private _selectedIds = new Set<string>();
   private _sub!: Subscription;
@@ -46,6 +48,18 @@ export class CategoryFilterComponent implements OnInit, OnDestroy {
     } else {
       this._selectedIds.delete(id);
     }
-    this.filterChange.emit([...this._selectedIds]);
+    this._emitChange();
+  }
+
+  public onSaleToggle(checked: boolean): void {
+    this.isSaleSelected = checked;
+    this._emitChange();
+  }
+
+  private _emitChange(): void {
+    this.filterChange.emit({
+      categoryIds: [...this._selectedIds],
+      returnSpecificDiscountProducts: this.isSaleSelected,
+    });
   }
 }

@@ -59,6 +59,7 @@ export class CatalogProductListComponent implements OnInit, OnChanges {
       page: this.pageIndex + 1,
       pageSize: this.pageSize,
       categoryIds: this.filters.categoryIds,
+      returnSpecificDiscountProducts: this.filters.returnSpecificDiscountProducts,
     };
 
     this._productService.getProductCards(request).subscribe({

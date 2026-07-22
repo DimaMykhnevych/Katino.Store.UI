@@ -18,7 +18,8 @@
   "catalog": {
     "filters": {
       "title": "Фільтри",
-      "categories": "Категорії"
+      "categories": "Категорії",
+      "sale": "SALE"
     }
   }
 }

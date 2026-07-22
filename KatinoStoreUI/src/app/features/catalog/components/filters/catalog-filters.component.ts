@@ -9,10 +9,7 @@ import { CatalogFilters } from 'src/app/core/models/catalog/catalog-filters';
 export class CatalogFiltersComponent {
   @Output() filtersChange = new EventEmitter<CatalogFilters>();
 
-  private _filters: CatalogFilters = { categoryIds: [] };
-
-  public onCategoryFilterChange(categoryIds: string[]): void {
-    this._filters = { ...this._filters, categoryIds };
-    this.filtersChange.emit({ ...this._filters });
+  public onCategoryFilterChange(filters: CatalogFilters): void {
+    this.filtersChange.emit(filters);
   }
 }

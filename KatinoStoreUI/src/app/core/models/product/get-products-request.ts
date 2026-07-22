@@ -3,4 +3,5 @@ export interface GetProductsRequest {
   page: number;
   pageSize: number;
   categoryIds: string[];
+  returnSpecificDiscountProducts?: boolean;
 }

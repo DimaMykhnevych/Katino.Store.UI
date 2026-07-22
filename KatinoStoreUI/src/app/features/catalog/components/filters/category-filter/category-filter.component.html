@@ -4,6 +4,14 @@
 
 <div *ngIf="!isLoading" class="category-list">
   <mat-checkbox
+    [checked]="isSaleSelected"
+    (change)="onSaleToggle($event.checked)"
+    class="category-item category-item--sale"
+  >
+    <span class="category-name">{{ 'catalog.filters.sale' | translate }}</span>
+  </mat-checkbox>
+
+  <mat-checkbox
     *ngFor="let category of categories"
     [checked]="isSelected(category.id)"
     (change)="onToggle(category.id, $event.checked)"
