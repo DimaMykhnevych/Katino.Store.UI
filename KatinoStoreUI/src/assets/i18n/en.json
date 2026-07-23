@@ -13,7 +13,8 @@
     "showAllProducts": "Show all products"
   },
   "products": {
-    "noResults": "No products found"
+    "noResults": "No products found",
+    "discountBadge": "Sale"
   },
   "catalog": {
     "filters": {

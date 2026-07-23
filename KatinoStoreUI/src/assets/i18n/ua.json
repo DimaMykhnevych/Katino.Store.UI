@@ -13,7 +13,8 @@
     "showAllProducts": "Показати всі товари"
   },
   "products": {
-    "noResults": "Товарів не знайдено"
+    "noResults": "Товарів не знайдено",
+    "discountBadge": "Знижка"
   },
   "catalog": {
     "filters": {

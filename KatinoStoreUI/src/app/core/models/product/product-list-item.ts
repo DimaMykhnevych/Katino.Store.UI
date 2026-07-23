@@ -6,6 +6,8 @@ export interface ProductListItem {
   description: string;
   categoryId: string;
   price: number;
+  hasDiscount: boolean;
+  discountPrice?: number;
   photoUrl: string;
   colors: ProductColor[];
 }

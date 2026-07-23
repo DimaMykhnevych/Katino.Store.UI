@@ -1,5 +1,6 @@
 <div class="product-card">
   <div class="product-image-wrapper">
+    <span class="discount-badge" *ngIf="product.hasDiscount">{{ 'products.discountBadge' | translate }}</span>
     <img
       class="product-image"
       [src]="product.photoUrl || placeholderUrl"
@@ -10,7 +11,13 @@
   <div class="product-info">
     <div class="product-info-main">
       <span class="product-name">{{ product.name }}</span>
-      <p class="product-price">{{ product.price }} ₴</p>
+      <p class="product-price" *ngIf="product.hasDiscount; else regularPrice">
+        <span class="product-price-old">{{ product.price }} ₴</span>
+        <span class="product-price-discount">{{ product.discountPrice }} ₴</span>
+      </p>
+      <ng-template #regularPrice>
+        <p class="product-price">{{ product.price }} ₴</p>
+      </ng-template>
     </div>
     <div class="product-colors" *ngIf="product.colors.length">
       <span
