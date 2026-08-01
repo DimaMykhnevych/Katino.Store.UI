@@ -10,7 +10,7 @@ import { CatalogFilters } from 'src/app/core/models/catalog/catalog-filters';
 })
 export class CatalogComponent implements OnInit, OnDestroy {
   public search: string = '';
-  public filters: CatalogFilters = { categoryIds: [] };
+  public filters: CatalogFilters = { categoryIds: [], collectionIds: [] };
   public isFilterOpen: boolean = false;
 
   private _querySub!: Subscription;

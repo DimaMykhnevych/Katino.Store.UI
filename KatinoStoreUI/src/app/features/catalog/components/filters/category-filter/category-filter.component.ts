@@ -1,6 +1,12 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
-import { CatalogFilters } from 'src/app/core/models/catalog/catalog-filters';
+import { CategoryFilterChange } from 'src/app/core/models/catalog/category-filter-change';
 import { CategoryListItem } from 'src/app/core/models/category/category-list-item';
 import { CategoryService } from 'src/app/core/services/category.service';
 
@@ -10,7 +16,7 @@ import { CategoryService } from 'src/app/core/services/category.service';
   styleUrls: ['./category-filter.component.scss'],
 })
 export class CategoryFilterComponent implements OnInit, OnDestroy {
-  @Output() filterChange = new EventEmitter<CatalogFilters>();
+  @Output() filterChange = new EventEmitter<CategoryFilterChange>();
 
   public categories: CategoryListItem[] = [];
   public isLoading: boolean = false;

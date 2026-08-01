@@ -1,11 +1,18 @@
 <div class="filters-panel">
   <mat-accordion [multi]="true">
 
-    <mat-expansion-panel expanded>
+    <mat-expansion-panel [expanded]="true">
       <mat-expansion-panel-header>
         <mat-panel-title>{{ 'catalog.filters.categories' | translate }}</mat-panel-title>
       </mat-expansion-panel-header>
       <app-category-filter (filterChange)="onCategoryFilterChange($event)"></app-category-filter>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="true">
+      <mat-expansion-panel-header>
+        <mat-panel-title>{{ 'catalog.filters.collections' | translate }}</mat-panel-title>
+      </mat-expansion-panel-header>
+      <app-collection-filter (filterChange)="onCollectionFilterChange($event)"></app-collection-filter>
     </mat-expansion-panel>
 
   </mat-accordion>

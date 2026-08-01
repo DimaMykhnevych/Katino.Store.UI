@@ -1,0 +1,15 @@
+<div *ngIf="isLoading" class="filter-loading">
+  <mat-spinner diameter="24"></mat-spinner>
+</div>
+
+<div *ngIf="!isLoading" class="collection-list">
+  <mat-checkbox
+    *ngFor="let collection of collections"
+    [checked]="isSelected(collection.id)"
+    (change)="onToggle(collection.id, $event.checked)"
+    class="collection-item"
+  >
+    <span class="collection-name">{{ collection.name }}</span>
+    <span class="collection-count">({{ collection.productCount }})</span>
+  </mat-checkbox>
+</div>

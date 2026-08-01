@@ -3,5 +3,6 @@ export interface GetProductsRequest {
   page: number;
   pageSize: number;
   categoryIds: string[];
+  collectionIds?: string[];
   returnSpecificDiscountProducts?: boolean;
 }

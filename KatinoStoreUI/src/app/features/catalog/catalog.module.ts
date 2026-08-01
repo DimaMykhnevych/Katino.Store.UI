@@ -10,9 +10,16 @@ import { CatalogComponent } from './catalog.component';
 import { CatalogProductListComponent } from './components/product-list/product-list.component';
 import { CatalogFiltersComponent } from './components/filters/catalog-filters.component';
 import { CategoryFilterComponent } from './components/filters/category-filter/category-filter.component';
+import { CollectionFilterComponent } from './components/filters/collection-filter/collection-filter.component';
 
 @NgModule({
-  declarations: [CatalogComponent, CatalogProductListComponent, CatalogFiltersComponent, CategoryFilterComponent],
+  declarations: [
+    CatalogComponent,
+    CatalogProductListComponent,
+    CatalogFiltersComponent,
+    CategoryFilterComponent,
+    CollectionFilterComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule,
