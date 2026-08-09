@@ -48,7 +48,7 @@ export class ProductGalleryComponent implements OnChanges {
   }
 
   public isPhotoLoading(photo: ProductCardPhoto | null): boolean {
-    return !photo || !this._loadedPhotoIds.has(photo.id);
+    return !!photo && !this._loadedPhotoIds.has(photo.id);
   }
 
   public onImageLoad(photo: ProductCardPhoto | null): void {

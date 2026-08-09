@@ -2,9 +2,11 @@ import {
   Component,
   Input,
   OnChanges,
+  OnDestroy,
   OnInit,
   SimpleChanges,
 } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { CatalogFilters } from 'src/app/core/models/catalog/catalog-filters';
 import { GetProductsRequest } from 'src/app/core/models/product/get-products-request';
 import { ProductListItem } from 'src/app/core/models/product/product-list-item';
@@ -15,7 +17,9 @@ import { ProductService } from 'src/app/core/services/product.service';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class CatalogProductListComponent implements OnInit, OnChanges {
+export class CatalogProductListComponent
+  implements OnInit, OnChanges, OnDestroy
+{
   @Input() search: string = '';
   @Input() filters: CatalogFilters = { categoryIds: [], collectionIds: [] };
 
@@ -27,6 +31,7 @@ export class CatalogProductListComponent implements OnInit, OnChanges {
   public isReloading: boolean = false;
 
   private _isFirstLoad = true;
+  private _sub!: Subscription;
 
   constructor(private _productService: ProductService) {}
 
@@ -54,6 +59,10 @@ export class CatalogProductListComponent implements OnInit, OnChanges {
     this.loadProducts();
   }
 
+  public ngOnDestroy(): void {
+    this._sub?.unsubscribe();
+  }
+
   private loadProducts(): void {
     if (this._isFirstLoad) {
       this.isLoading = true;
@@ -71,7 +80,8 @@ export class CatalogProductListComponent implements OnInit, OnChanges {
         this.filters.returnSpecificDiscountProducts,
     };
 
-    this._productService.getProductCards(request).subscribe({
+    this._sub?.unsubscribe();
+    this._sub = this._productService.getProductCards(request).subscribe({
       next: (response) => {
         this.products = response.items;
         this.totalCount = response.totalCount;
