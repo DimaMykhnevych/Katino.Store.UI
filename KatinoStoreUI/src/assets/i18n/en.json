@@ -23,5 +23,15 @@
       "collections": "Collections",
       "sale": "SALE"
     }
+  },
+  "productDetails": {
+    "notFound": "Product not found",
+    "article": "Article",
+    "color": "Color",
+    "size": "Size",
+    "measurements": "Measurements",
+    "shippingInStock": "Shipping within 1-3 days",
+    "shippingOnOrder": "Shipping within 8 business days",
+    "addToCart": "Add to cart"
   }
 }

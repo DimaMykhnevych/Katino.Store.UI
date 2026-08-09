@@ -1,0 +1,67 @@
+<div class="product-details-container container">
+  <div *ngIf="isLoading" class="initial-loading">
+    <app-logo-spinner></app-logo-spinner>
+  </div>
+
+  <div *ngIf="!isLoading && notFound" class="not-found">
+    {{ 'productDetails.notFound' | translate }}
+  </div>
+
+  <ng-container *ngIf="!isLoading && product">
+    <div class="breadcrumbs">
+      <a [routerLink]="['/catalog']">{{ 'navbar.catalog' | translate }}</a>
+      <span> / </span>
+      <span>{{ product.category.name }}</span>
+    </div>
+
+    <div class="product-layout">
+      <div class="gallery-column">
+        <app-product-gallery [photos]="galleryPhotos"></app-product-gallery>
+      </div>
+
+      <div class="info-column">
+        <span class="discount-badge" *ngIf="product.hasDiscount">{{ 'products.discountBadge' | translate }}</span>
+
+        <h1 class="product-name">{{ product.name }}</h1>
+
+        <p class="product-price" *ngIf="product.hasDiscount; else regularPrice">
+          <span class="product-price-old">{{ product.price }} ₴</span>
+          <span class="product-price-discount">{{ product.discountPrice }} ₴</span>
+        </p>
+        <ng-template #regularPrice>
+          <p class="product-price">{{ product.price }} ₴</p>
+        </ng-template>
+
+        <p class="product-article" *ngIf="article">
+          {{ 'productDetails.article' | translate }}: {{ article }}
+        </p>
+
+        <app-color-selector
+          [colors]="availableColors"
+          [selectedColorId]="selectedColorId"
+          (colorSelected)="onColorSelected($event)"
+        ></app-color-selector>
+
+        <app-size-selector
+          [sizes]="availableSizes"
+          [selectedSizeId]="selectedSizeId"
+          [availableSizeIds]="availableSizeIdsForSelectedColor"
+          (sizeSelected)="onSizeSelected($event)"
+        ></app-size-selector>
+
+        <p class="shipping-text" *ngIf="shippingText">
+          <mat-icon>local_shipping</mat-icon>
+          {{ shippingText | translate }}
+        </p>
+
+        <button type="button" class="add-to-cart-btn" [disabled]="!selectedVariant">
+          {{ 'productDetails.addToCart' | translate }}
+        </button>
+
+        <p class="product-description">{{ product.description }}</p>
+
+        <app-product-measurements [measurements]="measurements"></app-product-measurements>
+      </div>
+    </div>
+  </ng-container>
+</div>

@@ -1,0 +1,150 @@
+@import 'theme/variables';
+
+.product-details-container {
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
+
+.initial-loading,
+.not-found {
+  display: flex;
+  justify-content: center;
+  padding: 64px 0;
+}
+
+.not-found {
+  color: $color-beige;
+  font-size: 1rem;
+}
+
+.breadcrumbs {
+  font-size: 0.8125rem;
+  color: $color-beige;
+  margin-bottom: 16px;
+
+  a {
+    color: $color-beige;
+    text-decoration: none;
+
+    &:hover {
+      color: $color-navy;
+    }
+  }
+}
+
+.product-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  @media (min-width: 992px) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+.gallery-column {
+  @media (min-width: 992px) {
+    flex: 0 0 58%;
+  }
+}
+
+.info-column {
+  @media (min-width: 992px) {
+    flex: 1;
+  }
+}
+
+.discount-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background-color: $color-orange;
+  color: $color-white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+}
+
+.product-name {
+  font-family: $font-heading;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: $color-dark-charcoal;
+  margin: 0 0 8px;
+}
+
+.product-price {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $color-dark-charcoal;
+  margin: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.product-price-old {
+  font-weight: 400;
+  font-size: 1rem;
+  color: $color-beige;
+  text-decoration: line-through;
+}
+
+.product-price-discount {
+  color: $color-orange;
+}
+
+.product-article {
+  font-size: 0.8125rem;
+  color: $color-beige;
+  margin: 6px 0 0;
+}
+
+.shipping-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.875rem;
+  color: $color-navy;
+  margin: 16px 0 0;
+
+  mat-icon {
+    font-size: 1.1rem;
+    height: 1.1rem;
+    width: 1.1rem;
+  }
+}
+
+.add-to-cart-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: $color-orange;
+  color: $color-white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:hover:not(:disabled) {
+    opacity: 0.9;
+  }
+}
+
+.product-description {
+  margin-top: 20px;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: $color-dark-charcoal;
+  white-space: pre-line;
+}

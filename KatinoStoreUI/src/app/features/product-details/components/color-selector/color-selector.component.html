@@ -1,0 +1,19 @@
+<div class="selector" *ngIf="colors.length">
+  <span class="selector-label">
+    {{ 'productDetails.color' | translate }}:
+    <strong>{{ selectedColorName }}</strong>
+  </span>
+
+  <div class="options">
+    <button
+      type="button"
+      class="color-option"
+      *ngFor="let color of colors"
+      [class.selected]="color.id === selectedColorId"
+      [style.background-color]="color.hexCode"
+      [title]="color.name"
+      [attr.aria-label]="color.name"
+      (click)="onSelect(color)"
+    ></button>
+  </div>
+</div>

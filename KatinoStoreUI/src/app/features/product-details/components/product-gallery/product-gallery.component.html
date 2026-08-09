@@ -1,0 +1,54 @@
+<div class="gallery">
+  <div class="thumbnails d-none d-lg-flex">
+    <button
+      type="button"
+      class="thumbnail"
+      *ngFor="let photo of sortedPhotos; let i = index"
+      [class.active]="i === activeIndex"
+      (click)="selectPhoto(i)"
+    >
+      <div class="image-spinner" *ngIf="isPhotoLoading(photo)">
+        <div class="image-spinner__circle"></div>
+      </div>
+      <img
+        [class.image--hidden]="isPhotoLoading(photo)"
+        [src]="photo.photoUrl || placeholderUrl"
+        [alt]="photo.altText"
+        (load)="onImageLoad(photo)"
+        (error)="onImageError($event, photo)"
+      />
+    </button>
+  </div>
+
+  <div class="main-image-wrapper">
+    <div class="image-spinner" *ngIf="isPhotoLoading(activePhoto)">
+      <div class="image-spinner__circle"></div>
+    </div>
+    <img
+      class="main-image"
+      [class.image--hidden]="isPhotoLoading(activePhoto)"
+      [src]="activePhoto?.photoUrl || placeholderUrl"
+      [alt]="activePhoto?.altText || ''"
+      (load)="onImageLoad(activePhoto)"
+      (error)="onImageError($event, activePhoto)"
+    />
+
+    <ng-container *ngIf="sortedPhotos.length > 1">
+      <button type="button" class="nav-arrow nav-arrow-prev" (click)="previous()" aria-label="Previous photo">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+      <button type="button" class="nav-arrow nav-arrow-next" (click)="next()" aria-label="Next photo">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </ng-container>
+  </div>
+
+  <div class="dots d-lg-none" *ngIf="sortedPhotos.length > 1">
+    <span
+      class="dot"
+      *ngFor="let photo of sortedPhotos; let i = index"
+      [class.active]="i === activeIndex"
+      (click)="selectPhoto(i)"
+    ></span>
+  </div>
+</div>

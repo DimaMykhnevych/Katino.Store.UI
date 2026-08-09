@@ -1,0 +1,43 @@
+@import 'theme/variables';
+
+.selector {
+  margin-top: 16px;
+}
+
+.selector-label {
+  display: block;
+  font-size: 0.875rem;
+  color: $color-beige;
+  margin-bottom: 8px;
+
+  strong {
+    color: $color-dark-charcoal;
+    font-weight: 600;
+  }
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.color-option {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid $color-white;
+  outline: 1px solid rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  padding: 0;
+  transition: outline-color 0.2s ease, transform 0.15s ease;
+
+  &:hover {
+    transform: scale(1.08);
+  }
+
+  &.selected {
+    outline: 2px solid $color-navy;
+    outline-offset: 1px;
+  }
+}

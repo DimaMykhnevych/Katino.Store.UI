@@ -1,0 +1,130 @@
+@import 'theme/variables';
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+
+  @media (min-width: 992px) {
+    flex-direction: row;
+    gap: 12px;
+  }
+}
+
+.thumbnails {
+  flex-direction: column;
+  gap: 10px;
+  width: 76px;
+}
+
+.thumbnail {
+  position: relative;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #f0ece8;
+
+  &.active {
+    border-color: $color-navy;
+  }
+
+  img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+.main-image-wrapper {
+  position: relative;
+  flex: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #f0ece8;
+
+  @media (min-width: 992px) {
+    position: sticky;
+    top: 96px;
+  }
+}
+
+.main-image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.2s ease;
+}
+
+.image--hidden {
+  opacity: 0;
+}
+
+.image-spinner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+
+  &__circle {
+    width: 28px;
+    height: 28px;
+    border: 3px solid rgba($color-beige, 0.3);
+    border-top-color: $color-navy;
+    border-radius: 50%;
+    animation: gallery-spin 0.7s linear infinite;
+  }
+}
+
+@keyframes gallery-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background-color: rgba($color-white, 0.85);
+  color: $color-dark-charcoal;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  &-prev {
+    left: 10px;
+  }
+
+  &-next {
+    right: 10px;
+  }
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: rgba($color-beige, 0.5);
+  cursor: pointer;
+
+  &.active {
+    background-color: $color-navy;
+  }
+}

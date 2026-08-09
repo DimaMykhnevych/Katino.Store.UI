@@ -15,6 +15,7 @@ import { MaterialModule } from './layout/material';
 import { NavbarModule } from './layout/navbar/navbar.module';
 import { MainPageModule } from './features/main-page/main-page.module';
 import { CatalogModule } from './features/catalog/catalog.module';
+import { ProductDetailsModule } from './features/product-details/product-details.module';
 import { SharedFeaturesModule } from './features/shared/shared-features.module';
 
 @NgModule({
@@ -38,6 +39,7 @@ import { SharedFeaturesModule } from './features/shared/shared-features.module';
     NavbarModule,
     MainPageModule,
     CatalogModule,
+    ProductDetailsModule,
     SharedFeaturesModule,
   ],
   providers: [

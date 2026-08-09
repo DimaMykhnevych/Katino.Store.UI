@@ -1,0 +1,13 @@
+<div class="measurements" *ngIf="hasMeasurements">
+  <mat-expansion-panel [expanded]="false">
+    <mat-expansion-panel-header>
+      <mat-panel-title>{{ 'productDetails.measurements' | translate }}</mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ng-container *ngFor="let measurement of measurements">
+      <div class="measurement" *ngIf="measurement.value">
+        <p class="measurement-line" *ngFor="let line of getLines(measurement.value)">{{ line }}</p>
+      </div>
+    </ng-container>
+  </mat-expansion-panel>
+</div>

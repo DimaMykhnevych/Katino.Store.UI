@@ -1,0 +1,20 @@
+<div class="selector" *ngIf="sizes.length">
+  <span class="selector-label">
+    {{ 'productDetails.size' | translate }}:
+    <strong>{{ selectedSizeName }}</strong>
+  </span>
+
+  <div class="options">
+    <button
+      type="button"
+      class="size-option"
+      *ngFor="let size of sizes"
+      [class.selected]="size.id === selectedSizeId"
+      [class.unavailable]="!isAvailable(size)"
+      [disabled]="!isAvailable(size)"
+      (click)="onSelect(size)"
+    >
+      {{ size.name }}
+    </button>
+  </div>
+</div>

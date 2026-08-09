@@ -1,0 +1,25 @@
+@import 'theme/variables';
+
+.measurements {
+  margin-top: 32px;
+
+  ::ng-deep .mat-expansion-panel {
+    box-shadow: none;
+    border: 1px solid rgba($color-beige, 0.35);
+  }
+
+  ::ng-deep .mat-expansion-panel-header-title {
+    color: $color-dark-charcoal;
+    font-weight: 600;
+  }
+}
+
+.measurement-line {
+  font-size: 0.9375rem;
+  color: $color-dark-charcoal;
+  margin: 0 0 4px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

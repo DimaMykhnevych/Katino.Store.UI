@@ -1,4 +1,4 @@
-<div class="product-card">
+<a class="product-card" [routerLink]="['/product', product.id]">
   <div class="product-image-wrapper">
     <span class="discount-badge" *ngIf="product.hasDiscount">{{ 'products.discountBadge' | translate }}</span>
     <img
@@ -28,4 +28,4 @@
       ></span>
     </div>
   </div>
-</div>
+</a>

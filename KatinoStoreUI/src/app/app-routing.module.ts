@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { NavbarComponent } from './layout/navbar/navbar.component';
 import { MainPageComponent } from './features/main-page/main-page.component';
 import { CatalogComponent } from './features/catalog/catalog.component';
+import { ProductDetailsComponent } from './features/product-details/product-details.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
       {
         path: 'catalog',
         component: CatalogComponent,
+      },
+      {
+        path: 'product/:id',
+        component: ProductDetailsComponent,
       },
     ],
   },
