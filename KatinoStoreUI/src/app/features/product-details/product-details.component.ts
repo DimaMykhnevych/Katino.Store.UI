@@ -79,6 +79,10 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     return this.selectedVariant?.article ?? null;
   }
 
+  public get availableQuantity(): number | null {
+    return this.selectedVariant?.availableQuantity ?? null;
+  }
+
   public get availableSizeIdsForSelectedColor(): string[] {
     if (!this.product) {
       return [];

@@ -49,6 +49,10 @@
           (sizeSelected)="onSizeSelected($event)"
         ></app-size-selector>
 
+        <p class="available-quantity" *ngIf="availableQuantity !== null">
+          {{ 'productDetails.availableQuantity' | translate: { count: availableQuantity } }}
+        </p>
+
         <p class="shipping-text" *ngIf="shippingText">
           <mat-icon>local_shipping</mat-icon>
           {{ shippingText | translate }}

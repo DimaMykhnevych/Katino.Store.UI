@@ -10,6 +10,7 @@ export interface ProductCardVariant {
   color: ProductCardColor;
   status: ProductVariantStatus;
   article: string;
+  availableQuantity: number;
   photos: ProductCardPhoto[];
   measurements: ProductCardMeasurement[];
 }

@@ -32,6 +32,7 @@
     "measurements": "Заміри",
     "shippingInStock": "Відправка протягом 1-3 днів",
     "shippingOnOrder": "Відправка протягом 8 робочих днів",
-    "addToCart": "Додати в кошик"
+    "addToCart": "Додати в кошик",
+    "availableQuantity": "В наявності: {{count}} шт."
   }
 }
