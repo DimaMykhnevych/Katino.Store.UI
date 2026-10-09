@@ -152,9 +152,54 @@ $navbar-height: 68px;
     pointer-events: none;
   }
 
+  // ── Account and cart ───────────────────────────────────────
+  .icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-white;
+    padding: 0.25rem;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: color 0.2s ease;
+
+    &:hover,
+    &.active {
+      color: $color-orange;
+    }
+
+    mat-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+      line-height: 1.5rem;
+    }
+  }
+
+  .login-link {
+    color: $color-white;
+    text-decoration: none;
+    font-size: 0.9375rem;
+
+    &:hover {
+      color: $color-orange;
+    }
+  }
+
+  // On mobile the cart sits right before the menu toggle; on desktop it follows the right-side controls.
+  .cart-link {
+    margin-left: auto;
+
+    @media (min-width: 992px) {
+      margin-left: 0;
+    }
+  }
+
   // ── Mobile toggle ──────────────────────────────────────────
   .mobile-toggle {
-    margin-left: auto;
     background: none;
     border: none;
     cursor: pointer;
@@ -222,6 +267,10 @@ $navbar-height: 68px;
 
       .mobile-nav-link {
         display: block;
+        width: 100%;
+        background: none;
+        border: none;
+        text-align: left;
         color: $color-white;
         text-decoration: none;
         padding: 0.75rem 1.5rem;
@@ -239,6 +288,12 @@ $navbar-height: 68px;
       }
     }
 
+    .mobile-account-email {
+      color: $color-beige;
+      font-size: 0.8125rem;
+      margin-left: 0.375rem;
+    }
+
     .mobile-lang-selector {
       display: flex;
       align-items: center;
@@ -254,4 +309,12 @@ $navbar-height: 68px;
   padding-top: $navbar-height;
   min-height: 100vh;
   background-color: $color-white;
+}
+
+// The account menu renders in an overlay outside the navbar.
+::ng-deep .account-email {
+  padding: 8px 16px;
+  font-size: 0.8125rem;
+  color: $color-beige;
+  border-bottom: 1px solid rgba($color-beige, 0.2);
 }

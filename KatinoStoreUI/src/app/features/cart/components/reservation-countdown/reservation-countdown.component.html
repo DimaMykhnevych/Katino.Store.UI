@@ -1,0 +1,12 @@
+<ng-container *ngIf="remaining$ | async as remaining; else expired">
+  <span class="countdown">
+    <mat-icon>schedule</mat-icon>
+    {{ 'cart.reservedFor' | translate: { time: remaining } }}
+  </span>
+</ng-container>
+<ng-template #expired>
+  <span class="countdown expired">
+    <mat-icon>schedule</mat-icon>
+    {{ 'cart.reservationExpired' | translate }}
+  </span>
+</ng-template>

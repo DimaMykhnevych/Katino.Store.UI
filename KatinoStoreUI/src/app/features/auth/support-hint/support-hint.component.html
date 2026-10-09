@@ -1,0 +1,7 @@
+<p class="support-hint" *ngIf="supportEmail; else noEmail">
+  {{ 'auth.supportHintWithEmail' | translate }}
+  <a [href]="'mailto:' + supportEmail">{{ supportEmail }}</a>
+</p>
+<ng-template #noEmail>
+  <p class="support-hint">{{ 'auth.supportHint' | translate }}</p>
+</ng-template>

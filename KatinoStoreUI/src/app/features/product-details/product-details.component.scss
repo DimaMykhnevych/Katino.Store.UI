@@ -147,6 +147,28 @@
   }
 }
 
+.variant-unavailable {
+  margin: 16px 0 0;
+  padding: 14px;
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  color: $color-beige;
+  background-color: rgba($color-beige, 0.12);
+}
+
+.add-to-cart-error {
+  margin: 8px 0 0;
+  font-size: 0.875rem;
+  color: $color-error;
+
+  a {
+    color: $color-navy;
+    font-weight: 600;
+    margin-left: 4px;
+  }
+}
+
 .product-description {
   margin-top: 20px;
   font-size: 0.9375rem;

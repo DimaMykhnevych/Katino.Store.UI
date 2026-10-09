@@ -58,7 +58,47 @@
           {{ "languageSelection.en" | translate }}
         </button>
       </div>
+
+      <ng-container *ngIf="auth$ | async as auth">
+        <ng-container *ngIf="auth.isLoggedIn; else desktopLogin">
+          <button
+            type="button"
+            class="icon-btn"
+            [matMenuTriggerFor]="accountMenu"
+            [attr.aria-label]="'navbar.account' | translate"
+          >
+            <mat-icon>person_outline</mat-icon>
+          </button>
+          <mat-menu #accountMenu="matMenu" xPosition="before">
+            <div class="account-email" *ngIf="auth.email">{{ auth.email }}</div>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>{{ "navbar.logout" | translate }}</span>
+            </button>
+          </mat-menu>
+        </ng-container>
+        <ng-template #desktopLogin>
+          <a class="nav-link login-link" [routerLink]="loginRoute" [queryParams]="loginQueryParams">
+            {{ "navbar.login" | translate }}
+          </a>
+        </ng-template>
+      </ng-container>
     </div>
+
+    <a
+      class="icon-btn cart-link"
+      [routerLink]="cartRoute"
+      routerLinkActive="active"
+      [attr.aria-label]="'navbar.cart' | translate"
+    >
+      <mat-icon
+        [matBadge]="itemsCount$ | async"
+        [matBadgeHidden]="!(itemsCount$ | async)"
+        matBadgeSize="small"
+        matBadgeColor="accent"
+        aria-hidden="false"
+      >shopping_bag</mat-icon>
+    </a>
 
     <button
       class="mobile-toggle d-flex d-lg-none"
@@ -106,6 +146,27 @@
           {{ "navbar.catalog" | translate }}
         </a>
       </li>
+      <ng-container *ngIf="auth$ | async as auth">
+        <li *ngIf="auth.isLoggedIn; else mobileLogin">
+          <button type="button" class="mobile-nav-link" (click)="logout()">
+            {{ "navbar.logout" | translate }}
+            <span class="mobile-account-email" *ngIf="auth.email">({{ auth.email }})</span>
+          </button>
+        </li>
+        <ng-template #mobileLogin>
+          <li>
+            <a
+              [routerLink]="loginRoute"
+              [queryParams]="loginQueryParams"
+              routerLinkActive="active"
+              class="mobile-nav-link"
+              (click)="mobileMenuOpen = false"
+            >
+              {{ "navbar.login" | translate }}
+            </a>
+          </li>
+        </ng-template>
+      </ng-container>
     </ul>
 
     <div class="mobile-lang-selector">

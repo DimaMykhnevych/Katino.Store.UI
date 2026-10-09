@@ -4,6 +4,10 @@ import { NavbarComponent } from './layout/navbar/navbar.component';
 import { MainPageComponent } from './features/main-page/main-page.component';
 import { CatalogComponent } from './features/catalog/catalog.component';
 import { ProductDetailsComponent } from './features/product-details/product-details.component';
+import { CartComponent } from './features/cart/cart.component';
+import { LoginComponent } from './features/auth/login/login.component';
+import { RegisterComponent } from './features/auth/register/register.component';
+import { EmailConfirmationComponent } from './features/auth/email-confirmation/email-confirmation.component';
 
 const routes: Routes = [
   {
@@ -26,6 +30,22 @@ const routes: Routes = [
       {
         path: 'product/:id',
         component: ProductDetailsComponent,
+      },
+      {
+        path: 'cart',
+        component: CartComponent,
+      },
+      {
+        path: 'login',
+        component: LoginComponent,
+      },
+      {
+        path: 'register',
+        component: RegisterComponent,
+      },
+      {
+        path: 'emailConfirmation',
+        component: EmailConfirmationComponent,
       },
     ],
   },

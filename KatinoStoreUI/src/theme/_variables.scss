@@ -11,10 +11,14 @@ $color-navy:          #1A3A6B;
 $color-orange:        #EB8125;
 $color-beige:         #A58F78;
 
+// Form and API error text
+$color-error:         #C62828;
+
 :root {
   --color-dark-charcoal: #{$color-dark-charcoal};
   --color-white:         #{$color-white};
   --color-navy:          #{$color-navy};
   --color-orange:        #{$color-orange};
   --color-beige:         #{$color-beige};
+  --color-error:         #{$color-error};
 }

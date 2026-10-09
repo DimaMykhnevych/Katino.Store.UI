@@ -2,9 +2,22 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DateAdapter } from '@angular/material/core';
 import { TranslateService } from '@ngx-translate/core';
-import { Subject, Subscription } from 'rxjs';
+import { Observable, Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { LanguageConstants } from 'src/app/core/constants/language-constants';
+import { RouteConstants } from 'src/app/core/constants/route-constants';
+import { CartService } from 'src/app/core/cart/cart.service';
+import {
+  AuthState,
+  CustomerAuthService,
+} from 'src/app/core/auth/services/customer-auth.service';
+
+// Pages a login should not return to.
+const AUTH_ROUTES = [
+  RouteConstants.login,
+  RouteConstants.register,
+  RouteConstants.emailConfirmation,
+];
 
 @Component({
   selector: 'app-navbar',
@@ -16,6 +29,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   public uaLang: string = LanguageConstants.UaLang;
   public enLang: string = LanguageConstants.EnLang;
   public searchQuery: string = '';
+  public readonly cartRoute = RouteConstants.cart;
+  public readonly loginRoute = RouteConstants.login;
+  public readonly itemsCount$: Observable<number>;
+  public readonly auth$: Observable<AuthState>;
 
   private _searchSubject = new Subject<string>();
   private _searchSub!: Subscription;
@@ -26,7 +43,19 @@ export class NavbarComponent implements OnInit, OnDestroy {
     private _dateAdapter: DateAdapter<Date>,
     private _router: Router,
     private _route: ActivatedRoute,
-  ) {}
+    private _auth: CustomerAuthService,
+    cartService: CartService,
+  ) {
+    this.itemsCount$ = cartService.itemsCount$;
+    this.auth$ = this._auth.state$;
+  }
+
+  public get loginQueryParams(): { returnUrl: string } | null {
+    const url = this._router.url;
+    return AUTH_ROUTES.some((route) => url.startsWith(route))
+      ? null
+      : { returnUrl: url };
+  }
 
   public get currentLanguage(): string | null {
     return (
@@ -65,6 +94,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
       this._dateAdapter.setLocale(LanguageConstants.EnLocale);
       return;
     }
+  }
+
+  public logout(): void {
+    this.mobileMenuOpen = false;
+    this._auth.logout();
   }
 
   public toggleMobileMenu(): void {

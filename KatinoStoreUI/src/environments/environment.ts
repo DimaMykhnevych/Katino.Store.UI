@@ -5,6 +5,8 @@
 export const environment = {
   production: false,
   apiHost: 'https://localhost:7291/api',
+  // Shown when a confirmation link expired or never arrived (no resend endpoint yet).
+  supportEmail: '',
 };
 
 /*

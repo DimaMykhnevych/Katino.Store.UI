@@ -1,0 +1,31 @@
+<aside class="cart-summary">
+  <h2 class="summary-title">{{ 'cart.summary' | translate }}</h2>
+
+  <dl class="summary-rows" [class.updating]="isUpdating">
+    <ng-container *ngIf="cart.totalDiscount > 0">
+      <div class="summary-row">
+        <dt>{{ 'cart.baseTotal' | translate }}</dt>
+        <dd>{{ cart.baseTotal }} ₴</dd>
+      </div>
+      <div class="summary-row discount">
+        <dt>{{ 'cart.discount' | translate }}</dt>
+        <dd>−{{ cart.totalDiscount }} ₴</dd>
+      </div>
+    </ng-container>
+    <div class="summary-row total">
+      <dt>{{ 'cart.total' | translate }}</dt>
+      <dd>{{ cart.totalPrice }} ₴</dd>
+    </div>
+  </dl>
+
+  <!-- Phase 3 (checkout) is not built yet: the button is shown but does nothing. -->
+  <button type="button" class="continue-btn" disabled aria-describedby="checkout-soon">
+    {{ 'cart.continue' | translate }}
+  </button>
+  <p id="checkout-soon" class="coming-soon">{{ 'cart.comingSoon' | translate }}</p>
+
+  <p *ngIf="!isLoggedIn" class="login-hint">
+    <a [routerLink]="loginRoute" [queryParams]="loginQueryParams">{{ 'navbar.login' | translate }}</a>.
+    {{ 'cart.loginHint' | translate }}
+  </p>
+</aside>

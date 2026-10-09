@@ -1,0 +1,20 @@
+@import 'theme/variables';
+
+.countdown {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8125rem;
+  color: $color-navy;
+  font-variant-numeric: tabular-nums;
+
+  mat-icon {
+    font-size: 1rem;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  &.expired {
+    color: $color-beige;
+  }
+}

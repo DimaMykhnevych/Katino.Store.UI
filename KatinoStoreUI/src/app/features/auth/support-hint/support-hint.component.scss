@@ -1,0 +1,11 @@
+@import 'theme/variables';
+
+.support-hint {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: $color-dark-charcoal;
+
+  a {
+    color: $color-navy;
+  }
+}

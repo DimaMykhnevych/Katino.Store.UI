@@ -1,0 +1,70 @@
+<div class="cart-container container" *ngIf="vm$ | async as vm">
+  <h1 class="cart-title">{{ 'cart.title' | translate }}</h1>
+
+  <div *ngIf="vm.auth.sessionExpired" class="notice notice-warning" role="alert">
+    <mat-icon>lock_clock</mat-icon>
+    <span class="notice-text">{{ 'cart.sessionExpired' | translate }}</span>
+    <a mat-flat-button color="primary" [routerLink]="loginRoute" [queryParams]="loginQueryParams">
+      {{ 'navbar.login' | translate }}
+    </a>
+  </div>
+
+  <div *ngIf="vm.auth.cartMergeFailed" class="notice notice-warning" role="alert">
+    <mat-icon>report</mat-icon>
+    <span class="notice-text">{{ 'cart.mergeFailed' | translate }}</span>
+    <button type="button" mat-icon-button [attr.aria-label]="'cart.dismiss' | translate" (click)="dismissMergeFailed()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="vm.cart.expiredNotice?.length" class="notice notice-info" role="status">
+    <mat-icon>timer_off</mat-icon>
+    <span class="notice-text">
+      {{ 'cart.expiredNotice' | translate: { count: vm.cart.expiredNotice?.length } }}
+    </span>
+    <button type="button" mat-icon-button [attr.aria-label]="'cart.dismiss' | translate" (click)="dismissExpiredNotice()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="vm.cart.loadFailed" class="notice notice-warning" role="alert">
+    <mat-icon>cloud_off</mat-icon>
+    <span class="notice-text">{{ 'cart.loadFailed' | translate }}</span>
+    <button type="button" mat-stroked-button (click)="retry()">{{ 'cart.retry' | translate }}</button>
+  </div>
+
+  <div *ngIf="!vm.cart.loaded && !vm.cart.loadFailed" class="initial-loading">
+    <app-logo-spinner></app-logo-spinner>
+  </div>
+
+  <ng-container *ngIf="vm.cart.loaded">
+    <div *ngIf="!vm.items.length; else cartContent" class="empty-cart">
+      <mat-icon>shopping_bag</mat-icon>
+      <p>{{ 'cart.empty' | translate }}</p>
+      <a mat-stroked-button routerLink="/catalog">{{ 'cart.goToCatalog' | translate }}</a>
+    </div>
+
+    <ng-template #cartContent>
+      <div class="cart-layout">
+        <section class="cart-lines">
+          <app-cart-line
+            *ngFor="let item of vm.items; trackBy: trackById"
+            [item]="item"
+            [pendingQuantity]="vm.cart.pendingQuantities[item.id]"
+            [removing]="vm.cart.removingLineIds.includes(item.id)"
+            [errorKey]="vm.cart.lineErrors[item.id]"
+            (quantityChange)="onQuantityChange(item.id, $event)"
+            (remove)="onRemove(item.id)"
+          ></app-cart-line>
+        </section>
+
+        <app-cart-summary
+          class="cart-summary-column"
+          [cart]="vm.cart.cart"
+          [isLoggedIn]="vm.auth.isLoggedIn"
+          [isUpdating]="vm.isUpdating"
+        ></app-cart-summary>
+      </div>
+    </ng-template>
+  </ng-container>
+</div>

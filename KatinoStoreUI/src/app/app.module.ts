@@ -4,7 +4,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import {
+  HTTP_INTERCEPTORS,
+  HttpClient,
+  HttpClientModule,
+} from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ToastrModule } from 'ngx-toastr';
@@ -17,6 +21,9 @@ import { MainPageModule } from './features/main-page/main-page.module';
 import { CatalogModule } from './features/catalog/catalog.module';
 import { ProductDetailsModule } from './features/product-details/product-details.module';
 import { SharedFeaturesModule } from './features/shared/shared-features.module';
+import { CartModule } from './features/cart/cart.module';
+import { AuthPagesModule } from './features/auth/auth-pages.module';
+import { CartAuthInterceptor } from './core/auth/services/cart-auth.interceptor';
 
 @NgModule({
   declarations: [AppComponent],
@@ -41,10 +48,13 @@ import { SharedFeaturesModule } from './features/shared/shared-features.module';
     CatalogModule,
     ProductDetailsModule,
     SharedFeaturesModule,
+    CartModule,
+    AuthPagesModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'uk' },
     { provide: DateAdapter, useClass: AppDateAdapter },
+    { provide: HTTP_INTERCEPTORS, useClass: CartAuthInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })

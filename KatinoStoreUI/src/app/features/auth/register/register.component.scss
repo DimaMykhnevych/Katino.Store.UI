@@ -1,0 +1,13 @@
+@import 'app/features/auth/auth-page';
+
+// The password hint wraps to two lines on narrow screens.
+.confirm-field {
+  margin-top: 12px;
+}
+
+.mismatch-error {
+  margin: -12px 0 12px;
+  padding: 0 1em;
+  font-size: 75%;
+  color: $color-error;
+}

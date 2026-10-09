@@ -58,9 +58,31 @@
           {{ shippingText | translate }}
         </p>
 
-        <button type="button" class="add-to-cart-btn" [disabled]="!selectedVariant">
+        <button
+          *ngIf="isSelectedVariantPurchasable; else variantUnavailable"
+          type="button"
+          class="add-to-cart-btn"
+          [disabled]="!selectedVariant || isAddingToCart"
+          (click)="onAddToCart()"
+        >
           {{ 'productDetails.addToCart' | translate }}
         </button>
+        <ng-template #variantUnavailable>
+          <p class="variant-unavailable">{{ 'productDetails.unavailable' | translate }}</p>
+        </ng-template>
+
+        <p *ngIf="addToCartErrorKey" class="add-to-cart-error" role="alert">
+          {{ addToCartErrorKey | translate }}
+          <a
+            *ngIf="addToCartErrorKey === 'productDetails.sessionExpired'"
+            [routerLink]="loginRoute"
+            [queryParams]="loginQueryParams"
+          >{{ 'navbar.login' | translate }}</a>
+          <a
+            *ngIf="addToCartErrorKey === 'apiErrors.cartItemsLimitExceeded' || addToCartErrorKey === 'apiErrors.cartItemLimitExceeded'"
+            routerLink="/cart"
+          >{{ 'navbar.cart' | translate }}</a>
+        </p>
 
         <p class="product-description">{{ product.description }}</p>
 

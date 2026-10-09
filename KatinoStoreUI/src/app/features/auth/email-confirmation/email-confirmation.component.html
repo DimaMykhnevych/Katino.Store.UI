@@ -1,0 +1,30 @@
+<div class="auth-container container" [ngSwitch]="status">
+  <div *ngSwitchCase="'confirming'" class="auth-message">
+    <app-logo-spinner></app-logo-spinner>
+    <p>{{ 'auth.confirmingEmail' | translate }}</p>
+  </div>
+
+  <div *ngSwitchCase="'confirmed'" class="auth-message">
+    <mat-icon>verified</mat-icon>
+    <p>{{ 'auth.emailConfirmed' | translate }}</p>
+    <a mat-flat-button color="primary" [routerLink]="loginRoute">{{ 'auth.loginLink' | translate }}</a>
+  </div>
+
+  <div *ngSwitchCase="'invalidLink'" class="auth-message error" role="alert">
+    <mat-icon>link_off</mat-icon>
+    <p>{{ 'auth.confirmationLinkInvalid' | translate }}</p>
+    <app-support-hint></app-support-hint>
+  </div>
+
+  <div *ngSwitchCase="'missingParams'" class="auth-message error" role="alert">
+    <mat-icon>link_off</mat-icon>
+    <p>{{ 'auth.confirmationLinkMissing' | translate }}</p>
+    <app-support-hint></app-support-hint>
+  </div>
+
+  <div *ngSwitchCase="'failed'" class="auth-message error" role="alert">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ (errorKey || 'apiErrors.generic') | translate }}</p>
+    <button type="button" mat-stroked-button (click)="confirm()">{{ 'cart.retry' | translate }}</button>
+  </div>
+</div>

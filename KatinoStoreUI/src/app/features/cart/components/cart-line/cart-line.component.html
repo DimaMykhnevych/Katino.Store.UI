@@ -1,0 +1,84 @@
+<article class="cart-line" [class.is-removing]="removing">
+  <div class="line-photo">
+    <img *ngIf="item.photoUrl; else noPhoto" [src]="item.photoUrl" [alt]="item.productName || ''" />
+    <ng-template #noPhoto>
+      <mat-icon>image_not_supported</mat-icon>
+    </ng-template>
+  </div>
+
+  <div class="line-body">
+    <div class="line-header">
+      <ng-container *ngIf="!isUnavailable; else unavailableTitle">
+        <a class="line-name" [routerLink]="['/product', item.productId]">{{ item.productName }}</a>
+      </ng-container>
+      <ng-template #unavailableTitle>
+        <span class="line-name unavailable">{{ 'cart.unavailable' | translate }}</span>
+      </ng-template>
+
+      <button
+        type="button"
+        mat-icon-button
+        class="remove-btn"
+        [disabled]="removing"
+        [attr.aria-label]="'cart.remove' | translate"
+        [matTooltip]="'cart.remove' | translate"
+        (click)="remove.emit()"
+      >
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    </div>
+
+    <ng-container *ngIf="!isUnavailable">
+      <p class="line-meta">
+        <span *ngIf="item.color" class="meta-item">
+          <span class="color-dot" [style.background-color]="item.color.hexCode"></span>
+          {{ item.color.name }}
+        </span>
+        <span *ngIf="item.size" class="meta-item">{{ 'cart.size' | translate }}: {{ item.size.name }}</span>
+        <span *ngIf="item.article" class="meta-item">{{ 'cart.article' | translate }}: {{ item.article }}</span>
+      </p>
+
+      <div class="line-controls">
+        <div class="quantity-control" [class.pending]="isPending">
+          <button
+            type="button"
+            class="qty-btn"
+            [disabled]="displayQuantity <= 1 || removing"
+            [attr.aria-label]="'cart.decrease' | translate"
+            (click)="decrease()"
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+          <span class="qty-value" aria-live="polite">{{ displayQuantity }}</span>
+          <button
+            type="button"
+            class="qty-btn"
+            [disabled]="removing"
+            [attr.aria-label]="'cart.increase' | translate"
+            (click)="increase()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
+
+        <div class="line-price" [class.pending]="isPending">
+          <span *ngIf="hasDiscount" class="price-old">{{ item.lineTotal }} ₴</span>
+          <span class="price-final" [class.discounted]="hasDiscount">{{ item.finalLineTotal }} ₴</span>
+          <span class="price-unit">{{ 'cart.perPiece' | translate: { price: item.unitPrice } }}</span>
+        </div>
+      </div>
+
+      <p *ngIf="errorKey" class="line-error" role="alert">{{ errorKey | translate }}</p>
+
+      <div *ngIf="item.backorderQuantity > 0" class="backorder-note">
+        <mat-icon>content_cut</mat-icon>
+        <span>
+          {{ 'cart.backorder' | translate: { count: item.backorderQuantity } }}.
+          {{ 'productDetails.shippingOnOrder' | translate }}
+        </span>
+      </div>
+
+      <app-reservation-countdown [expiresAt]="item.reservationExpiresAt"></app-reservation-countdown>
+    </ng-container>
+  </div>
+</article>
