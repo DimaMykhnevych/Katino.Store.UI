@@ -177,21 +177,29 @@ export class CustomerAuthService implements OnDestroy {
   }
 
   // Login or logout in another tab changes localStorage; mirror it here.
+  // The email is compared too: logging in as another account there keeps isLoggedIn true here.
+  // The token is written before the email, so the email key is watched to pick up the new value.
   private _listenToOtherTabs(): void {
     fromEvent<StorageEvent>(window, 'storage')
       .pipe(
-        filter((e) => e.key === StorageKeys.CustomerToken || e.key === null),
+        filter(
+          (e) =>
+            e.key === StorageKeys.CustomerToken ||
+            e.key === StorageKeys.CustomerEmail ||
+            e.key === null,
+        ),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
         const isLoggedIn = !!this._customerToken.token;
-        if (isLoggedIn === this.state.isLoggedIn) {
+        const email = isLoggedIn ? readStorage(StorageKeys.CustomerEmail) : null;
+        if (isLoggedIn === this.state.isLoggedIn && email === this.state.email) {
           return;
         }
 
         this._setState({
           isLoggedIn,
-          email: isLoggedIn ? readStorage(StorageKeys.CustomerEmail) : null,
+          email,
           sessionExpired: false,
           cartMergeFailed: false,
         });

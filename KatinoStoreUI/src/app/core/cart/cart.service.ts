@@ -27,7 +27,11 @@ import {
 } from 'rxjs/operators';
 import { AppSettings } from '../settings';
 import { StorageKeys } from '../constants/storage-keys';
-import { ApiError, apiErrorMessageKey, parseApiError } from '../http/errors/api-error';
+import {
+  ApiError,
+  apiErrorMessageKey,
+  parseApiError,
+} from '../http/errors/api-error';
 import { Cart, createEmptyCart, EMPTY_GUID } from '../models/cart/cart';
 import { CartItem } from '../models/cart/cart-item';
 import { AddCartItemRequest } from '../models/cart/add-cart-item-request';
@@ -176,7 +180,10 @@ export class CartService implements OnDestroy {
 
     const { [lineId]: _, ...lineErrors } = this._state.lineErrors;
     this._patchState({
-      pendingQuantities: { ...this._state.pendingQuantities, [lineId]: quantity },
+      pendingQuantities: {
+        ...this._state.pendingQuantities,
+        [lineId]: quantity,
+      },
       lineErrors,
     });
     this._quantityChanges$.next({ lineId, quantity });
@@ -327,7 +334,9 @@ export class CartService implements OnDestroy {
 
   private _finishRemoving(lineId: string): void {
     this._patchState({
-      removingLineIds: this._state.removingLineIds.filter((id) => id !== lineId),
+      removingLineIds: this._state.removingLineIds.filter(
+        (id) => id !== lineId,
+      ),
     });
   }
 
@@ -409,7 +418,8 @@ export class CartService implements OnDestroy {
       .pipe(
         distinctUntilChanged(
           (a, b) =>
-            a.isLoggedIn === b.isLoggedIn && a.sessionExpired === b.sessionExpired,
+            a.isLoggedIn === b.isLoggedIn &&
+            a.sessionExpired === b.sessionExpired,
         ),
         takeUntil(this._destroy$),
       )
@@ -437,7 +447,10 @@ export class CartService implements OnDestroy {
       });
   }
 
-  private _pick<T>(record: Record<string, T>, keys: Set<string>): Record<string, T> {
+  private _pick<T>(
+    record: Record<string, T>,
+    keys: Set<string>,
+  ): Record<string, T> {
     return Object.keys(record)
       .filter((key) => keys.has(key))
       .reduce<Record<string, T>>((result, key) => {

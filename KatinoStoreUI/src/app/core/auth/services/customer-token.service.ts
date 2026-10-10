@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { StorageKeys } from '../../constants/storage-keys';
-import { readStorage, removeStorage, writeStorage } from '../../http/storage.util';
+import {
+  readStorage,
+  removeStorage,
+  writeStorage,
+} from '../../http/storage.util';
 
 // Customer JWT. Never log it, never put it in a URL.
 @Injectable({

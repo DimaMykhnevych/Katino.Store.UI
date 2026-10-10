@@ -139,4 +139,19 @@ describe('CustomerAuthService', () => {
       cartMergeFailed: false,
     });
   });
+
+  it('picks up another account logged in from another tab', () => {
+    localStorage.setItem(StorageKeys.CustomerToken, jwt(Date.now() / 1000 + 3600));
+    localStorage.setItem(StorageKeys.CustomerEmail, 'old@b.c');
+    const service = create();
+
+    localStorage.setItem(StorageKeys.CustomerToken, jwt(Date.now() / 1000 + 7200));
+    localStorage.setItem(StorageKeys.CustomerEmail, 'new@b.c');
+    window.dispatchEvent(
+      new StorageEvent('storage', { key: StorageKeys.CustomerEmail }),
+    );
+
+    expect(service.state.isLoggedIn).toBeTrue();
+    expect(service.state.email).toBe('new@b.c');
+  });
 });
