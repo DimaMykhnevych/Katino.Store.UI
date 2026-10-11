@@ -217,17 +217,90 @@ describe('CartService', () => {
     httpMock.expectNone(cartUrl);
   });
 
-  it('keeps the expired-items notice until dismissed', () => {
+  it('keeps expired lines across refetches until dismissed', () => {
     const expired = item('old');
     createWithCart(cart([], { removedExpiredItems: [expired] }));
 
-    expect(state.expiredNotice).toEqual([expired]);
+    expect(state.expiredItems).toEqual([expired]);
     service.load();
     httpMock.expectOne(cartUrl).flush(cart([]));
-    expect(state.expiredNotice).toEqual([expired]);
+    expect(state.expiredItems).toEqual([expired]);
 
-    service.dismissExpiredNotice();
-    expect(state.expiredNotice).toBeNull();
+    // Hiding one is local: nothing goes to the server
+    service.dismissExpired('old');
+    httpMock.expectNone(() => true);
+    expect(state.expiredItems).toEqual([]);
+  });
+
+  it('adds an expired line again with its old quantity', () => {
+    const expired = item('old', 3);
+    createWithCart(cart([], { removedExpiredItems: [expired] }));
+
+    service.readd(expired);
+    expect(state.readdingLineIds).toEqual(['old']);
+    const req = httpMock.expectOne(`${cartUrl}/items`);
+    expect(req.request.body).toEqual({ productVariantId: 'v-old', quantity: 3 });
+    req.flush(cart([item('new', 3, { productVariantId: 'v-old' })]));
+
+    expect(state.expiredItems).toEqual([]);
+    expect(state.readdingLineIds).toEqual([]);
+    expect(state.cart.items?.map((i) => i.id)).toEqual(['new']);
+  });
+
+  it('shows why adding an expired line again failed, on that line', () => {
+    const expired = item('old');
+    createWithCart(cart([], { removedExpiredItems: [expired] }));
+
+    service.readd(expired);
+    httpMock
+      .expectOne(`${cartUrl}/items`)
+      .flush(problem('productVariantId', 'variantNotPurchasable'), { status: 409, statusText: 'Conflict' });
+    httpMock.expectOne(cartUrl).flush(cart([]));
+
+    expect(state.expiredItems).toEqual([expired]);
+    expect(state.lineErrors['old']).toBe('apiErrors.variantNotPurchasable');
+  });
+
+  it('drops an expired line once the same product is in the cart again', () => {
+    const expired = item('old');
+    createWithCart(cart([], { removedExpiredItems: [expired] }));
+
+    // Added again from the product page, not through the expired line
+    service.add('v-old').subscribe();
+    httpMock.expectOne(`${cartUrl}/items`).flush(cart([item('new', 1, { productVariantId: 'v-old' })]));
+
+    expect(state.expiredItems).toEqual([]);
+  });
+
+  it('ignores a late report of an expired line whose product was added again since', () => {
+    const old = item('old');
+    createWithCart(cart([old]));
+
+    service.load();
+    const lateGet = httpMock.expectOne(cartUrl);
+    service.add('v-old').subscribe();
+    httpMock.expectOne(`${cartUrl}/items`).flush(cart([item('new', 1, { productVariantId: 'v-old' })]));
+    // The GET sent before the add answers last, reporting the old line as expired
+    lateGet.flush(cart([], { removedExpiredItems: [old] }));
+
+    expect(state.expiredItems).toEqual([]);
+    expect(state.cart.items?.map((i) => i.id)).toEqual(['new']);
+  });
+
+  it('forgets expired lines when the customer changes, including late answers for the previous one', () => {
+    localStorage.setItem(StorageKeys.CustomerToken, 'token-a');
+    localStorage.setItem(StorageKeys.CustomerEmail, 'a@example.com');
+    create();
+    const first = httpMock.expectOne(cartUrl);
+
+    localStorage.setItem(StorageKeys.CustomerToken, 'token-b');
+    localStorage.setItem(StorageKeys.CustomerEmail, 'b@example.com');
+    window.dispatchEvent(new StorageEvent('storage', { key: StorageKeys.CustomerEmail }));
+    httpMock.expectOne(cartUrl).flush(cart([], { cartToken: null }));
+    // Customer A's cart reports an expired line, but it arrives after the switch
+    first.flush(cart([], { cartToken: null, removedExpiredItems: [item('a-line')] }));
+
+    expect(state.expiredItems).toEqual([]);
   });
 
   it('refetches once the earliest reservation expires', fakeAsync(() => {
@@ -242,7 +315,7 @@ describe('CartService', () => {
     httpMock.expectOne(cartUrl).flush(cart([], { removedExpiredItems: [soon] }));
 
     expect(state.cart.items).toEqual([]);
-    expect(state.expiredNotice?.length).toBe(1);
+    expect(state.expiredItems.map((i) => i.id)).toEqual(['1']);
     service.ngOnDestroy();
   }));
 

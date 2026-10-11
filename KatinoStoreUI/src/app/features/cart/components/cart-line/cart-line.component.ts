@@ -18,8 +18,13 @@ export class CartLineComponent {
   @Input() pendingQuantity: number | undefined;
   @Input() removing = false;
   @Input() errorKey: string | undefined;
+  // The hold ran out and the server dropped the line: shown greyed out, can be added again.
+  @Input() expired = false;
+  @Input() readding = false;
   @Output() quantityChange = new EventEmitter<number>();
+  // Deletes an active line; hides an expired one.
   @Output() remove = new EventEmitter<void>();
+  @Output() readd = new EventEmitter<void>();
 
   // The quantity the user picked; prices stay the server's until the PATCH answers.
   public get displayQuantity(): number {

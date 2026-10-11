@@ -49,10 +49,14 @@ export interface CartState {
   // Quantity the user picked while the debounced PATCH has not been answered yet.
   pendingQuantities: Record<string, number>;
   removingLineIds: string[];
-  // Translation key of the last write error per cart line.
+  // Translation key of the last write error per cart line (active or expired).
   lineErrors: Record<string, string>;
-  // removedExpiredItems from the response that removed them. Kept in memory until dismissed, never stored.
-  expiredNotice: CartItem[] | null;
+  // Lines the server dropped when their hold ran out (removedExpiredItems). The server keeps no trace
+  // of them, so they live only in memory here: shown greyed out until added again or dismissed, and
+  // forgotten on reload or when the customer changes.
+  expiredItems: CartItem[];
+  // Expired lines being added again.
+  readdingLineIds: string[];
 }
 
 interface QuantityChange {
@@ -81,7 +85,8 @@ export class CartService implements OnDestroy {
     pendingQuantities: {},
     removingLineIds: [],
     lineErrors: {},
-    expiredNotice: null,
+    expiredItems: [],
+    readdingLineIds: [],
   });
   private readonly _quantityChanges$ = new Subject<QuantityChange>();
   private readonly _expiryRefetch$ = new Subject<number>();
@@ -93,6 +98,8 @@ export class CartService implements OnDestroy {
   private _appliedSeq = 0;
   // The GET on its way, if any. A second load() right after it (app start, then the cart page) reuses it.
   private _inflightGetSeq: number | null = null;
+  // Requests up to this one were sent for a previous customer (or guest); none of their answer applies.
+  private _identitySeq = 0;
   private _pendingExpiry: number | null = null;
   private _lastExpiryRefetchAt: number | null = null;
 
@@ -177,9 +184,9 @@ export class CartService implements OnDestroy {
   }
 
   // Errors are rethrown as ApiError so the product page can show them next to its button.
-  public add(productVariantId: string): Observable<Cart> {
+  public add(productVariantId: string, quantity = 1): Observable<Cart> {
     const seq = ++this._requestSeq;
-    const body: AddCartItemRequest = { productVariantId, quantity: 1 };
+    const body: AddCartItemRequest = { productVariantId, quantity };
 
     return this._http.post<Cart>(`${this._cartUrl}/items`, body).pipe(
       tap((cart) => {
@@ -236,8 +243,52 @@ export class CartService implements OnDestroy {
       });
   }
 
-  public dismissExpiredNotice(): void {
-    this._patchState({ expiredNotice: null });
+  // Adds an expired line again with its old quantity; the server starts a new hold for it.
+  public readd(item: CartItem): void {
+    if (this._state.readdingLineIds.includes(item.id)) {
+      return;
+    }
+
+    const { [item.id]: _, ...lineErrors } = this._state.lineErrors;
+    this._patchState({
+      readdingLineIds: [...this._state.readdingLineIds, item.id],
+      lineErrors,
+    });
+
+    this.add(item.productVariantId, item.quantity)
+      .pipe(
+        finalize(() =>
+          this._patchState({
+            readdingLineIds: this._state.readdingLineIds.filter(
+              (id) => id !== item.id,
+            ),
+          }),
+        ),
+        takeUntil(this._destroy$),
+      )
+      .subscribe({
+        // On success the line is back in the cart, which drops it from the expired list.
+        error: (error: ApiError) => {
+          if (error.status === 401) {
+            return;
+          }
+          this._patchState({
+            lineErrors: {
+              ...this._state.lineErrors,
+              [item.id]: apiErrorMessageKey(error),
+            },
+          });
+        },
+      });
+  }
+
+  // Hides an expired line; nothing to tell the server, it no longer has the line.
+  public dismissExpired(lineId: string): void {
+    const { [lineId]: _, ...lineErrors } = this._state.lineErrors;
+    this._patchState({
+      expiredItems: this._state.expiredItems.filter((i) => i.id !== lineId),
+      lineErrors,
+    });
   }
 
   private get _state(): CartState {
@@ -269,17 +320,20 @@ export class CartService implements OnDestroy {
   }
 
   private _applyCart(cart: Cart, seq: number): void {
-    // The notice belongs to the response that removed the lines, even if that response is stale.
-    if (cart.removedExpiredItems?.length) {
-      this._patchState({
-        expiredNotice: [
-          ...(this._state.expiredNotice ?? []),
-          ...cart.removedExpiredItems,
-        ],
-      });
+    if (seq <= this._identitySeq) {
+      return;
     }
 
-    if (seq <= this._appliedSeq) {
+    // Expired lines are reported only by the response that removed them, so keep them even if that
+    // response is otherwise stale. What counts as "in the cart" is the newer of this response and the
+    // cart already shown.
+    const isStale = seq <= this._appliedSeq;
+    this._rememberExpired(
+      cart.removedExpiredItems ?? [],
+      (isStale ? this._state.cart.items : cart.items) ?? [],
+    );
+
+    if (isStale) {
       return;
     }
     this._appliedSeq = seq;
@@ -287,15 +341,41 @@ export class CartService implements OnDestroy {
     this._syncGuestToken(cart);
 
     const items = cart.items ?? [];
+    const activeVariants = new Set(items.map((i) => i.productVariantId));
+    // A product back in the cart (added again, here or anywhere else) is no longer shown as expired.
+    const expiredItems = this._state.expiredItems.filter(
+      (i) => !activeVariants.has(i.productVariantId),
+    );
     const lineIds = new Set(items.map((i) => i.id));
+    const shownIds = new Set([...lineIds, ...expiredItems.map((i) => i.id)]);
     this._patchState({
       cart: { ...cart, items },
       loaded: true,
+      expiredItems,
       pendingQuantities: this._pick(this._state.pendingQuantities, lineIds),
-      lineErrors: this._pick(this._state.lineErrors, lineIds),
+      lineErrors: this._pick(this._state.lineErrors, shownIds),
     });
 
     this._scheduleExpiryRefetch(items);
+  }
+
+  // Newest first, one entry per variant; never one that is in the cart again.
+  private _rememberExpired(removed: CartItem[], inCart: CartItem[]): void {
+    if (!removed.length) {
+      return;
+    }
+
+    const active = new Set(inCart.map((i) => i.productVariantId));
+    const fresh = removed.filter((i) => !active.has(i.productVariantId));
+    const freshVariants = new Set(fresh.map((i) => i.productVariantId));
+    this._patchState({
+      expiredItems: [
+        ...fresh,
+        ...this._state.expiredItems.filter(
+          (i) => !freshVariants.has(i.productVariantId),
+        ),
+      ],
+    });
   }
 
   private _syncGuestToken(cart: Cart): void {
@@ -453,7 +533,10 @@ export class CartService implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
+        // Another customer (or none): the previous one's answers and expired lines don't belong here.
+        this._identitySeq = this._requestSeq;
         this._dropResponsesInFlight();
+        this._patchState({ expiredItems: [], readdingLineIds: [] });
         this.load();
       });
   }

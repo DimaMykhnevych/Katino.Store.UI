@@ -49,7 +49,7 @@
     "loadFailed": "Could not load the cart.",
     "retry": "Try again",
     "dismiss": "Close",
-    "expiredNotice": "{{count}} item(s) were removed from your cart: the hold expired.",
+    "expiredNotice": "{{count}} item(s) in your cart are no longer reserved: the hold expired.",
     "sessionExpired": "Your session has expired. Log in again to see your cart.",
     "mergeFailed": "Could not move the items from your guest cart. Please add them again.",
     "loginHint": "Log in to keep your cart across devices.",
@@ -70,7 +70,11 @@
     "discount": "Discount",
     "total": "Total",
     "continue": "Continue",
-    "comingSoon": "Checkout is coming soon"
+    "comingSoon": "Checkout is coming soon",
+    "expired": "Hold expired",
+    "readd": "Add again",
+    "dismissExpired": "Hide",
+    "pieces": "{{count}} pcs."
   },
   "auth": {
     "loginTitle": "Log in",

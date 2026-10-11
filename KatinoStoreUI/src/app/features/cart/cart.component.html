@@ -17,16 +17,6 @@
     </button>
   </div>
 
-  <div *ngIf="vm.cart.expiredNotice?.length" class="notice notice-info" role="status">
-    <mat-icon>timer_off</mat-icon>
-    <span class="notice-text">
-      {{ 'cart.expiredNotice' | translate: { count: vm.cart.expiredNotice?.length } }}
-    </span>
-    <button type="button" mat-icon-button [attr.aria-label]="'cart.dismiss' | translate" (click)="dismissExpiredNotice()">
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-
   <div *ngIf="vm.cart.loadFailed" class="notice notice-warning" role="alert">
     <mat-icon>cloud_off</mat-icon>
     <span class="notice-text">{{ 'cart.loadFailed' | translate }}</span>
@@ -38,7 +28,7 @@
   </div>
 
   <ng-container *ngIf="vm.cart.loaded">
-    <div *ngIf="!vm.items.length; else cartContent" class="empty-cart">
+    <div *ngIf="!vm.items.length && !vm.expiredItems.length; else cartContent" class="empty-cart">
       <mat-icon>shopping_bag</mat-icon>
       <p>{{ 'cart.empty' | translate }}</p>
       <a mat-stroked-button routerLink="/catalog">{{ 'cart.goToCatalog' | translate }}</a>
@@ -56,9 +46,21 @@
             (quantityChange)="onQuantityChange(item.id, $event)"
             (remove)="onRemove(item.id)"
           ></app-cart-line>
+
+          <!-- Lines whose hold ran out: not in the cart or the totals any more, kept here until re-added or dismissed -->
+          <app-cart-line
+            *ngFor="let item of vm.expiredItems; trackBy: trackById"
+            [item]="item"
+            [expired]="true"
+            [readding]="vm.cart.readdingLineIds.includes(item.id)"
+            [errorKey]="vm.cart.lineErrors[item.id]"
+            (readd)="onReadd(item)"
+            (remove)="onDismissExpired(item.id)"
+          ></app-cart-line>
         </section>
 
         <app-cart-summary
+          *ngIf="vm.items.length"
           class="cart-summary-column"
           [cart]="vm.cart.cart"
           [isLoggedIn]="vm.auth.isLoggedIn"

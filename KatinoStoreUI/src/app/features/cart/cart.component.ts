@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { combineLatest, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { RouteConstants } from 'src/app/core/constants/route-constants';
@@ -13,6 +13,7 @@ interface CartViewModel {
   cart: CartState;
   auth: AuthState;
   items: CartItem[];
+  expiredItems: CartItem[];
   isUpdating: boolean;
 }
 
@@ -21,7 +22,7 @@ interface CartViewModel {
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.scss'],
 })
-export class CartComponent implements OnInit, OnDestroy {
+export class CartComponent implements OnInit {
   public readonly vm$: Observable<CartViewModel>;
   public readonly loginRoute = RouteConstants.login;
   public readonly loginQueryParams = { returnUrl: RouteConstants.cart };
@@ -35,6 +36,7 @@ export class CartComponent implements OnInit, OnDestroy {
         cart,
         auth,
         items: cart.cart.items ?? [],
+        expiredItems: cart.expiredItems,
         isUpdating: Object.keys(cart.pendingQuantities).length > 0,
       })),
     );
@@ -43,11 +45,6 @@ export class CartComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     this._auth.checkTokenExpiry();
     this._cartService.load();
-  }
-
-  // The expiry notice is one-time: leaving the page drops it.
-  public ngOnDestroy(): void {
-    this._cartService.dismissExpiredNotice();
   }
 
   public onQuantityChange(lineId: string, quantity: number): void {
@@ -62,8 +59,12 @@ export class CartComponent implements OnInit, OnDestroy {
     this._cartService.load();
   }
 
-  public dismissExpiredNotice(): void {
-    this._cartService.dismissExpiredNotice();
+  public onReadd(item: CartItem): void {
+    this._cartService.readd(item);
+  }
+
+  public onDismissExpired(lineId: string): void {
+    this._cartService.dismissExpired(lineId);
   }
 
   public dismissMergeFailed(): void {

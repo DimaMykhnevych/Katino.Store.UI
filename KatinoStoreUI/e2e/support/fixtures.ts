@@ -71,6 +71,15 @@ export class App {
     return this.page.locator('app-cart-line');
   }
 
+  public get activeLines(): Locator {
+    return this.page.locator('app-cart-line:has(article:not(.is-expired))');
+  }
+
+  // Lines whose hold ran out, shown greyed out (kept in memory by the app).
+  public get expiredLines(): Locator {
+    return this.page.locator('app-cart-line:has(article.is-expired)');
+  }
+
   public get badge(): Locator {
     return this.page.locator('a.cart-link .mat-badge-content');
   }
