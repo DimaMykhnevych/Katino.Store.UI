@@ -128,14 +128,18 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     return { returnUrl: this._router.url };
   }
 
+  // In stock but fully held by other carts ships like an order: the next one is made to order.
   public get shippingText(): string | null {
     const status = this.selectedVariant?.status;
 
-    if (status === ProductVariantStatus.inStock) {
+    if (status === ProductVariantStatus.inStock && (this.availableQuantity ?? 0) > 0) {
       return 'productDetails.shippingInStock';
     }
 
-    if (status === ProductVariantStatus.onOrder) {
+    if (
+      status === ProductVariantStatus.inStock ||
+      status === ProductVariantStatus.onOrder
+    ) {
       return 'productDetails.shippingOnOrder';
     }
 
