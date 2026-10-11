@@ -6,7 +6,9 @@
     "start": "set NODE_OPTIONS=--openssl-legacy-provider && ng serve",
     "build": "set NODE_OPTIONS=--openssl-legacy-provider && ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "e2e": "playwright test -c e2e",
+    "e2e:report": "playwright show-report e2e/report"
   },
   "private": true,
   "dependencies": {
@@ -34,6 +36,7 @@
     "@angular-devkit/build-angular": "~12.2.11",
     "@angular/cli": "~12.2.11",
     "@angular/compiler-cli": "~12.2.0",
+    "@playwright/test": "^1.64.0",
     "@types/jasmine": "~3.8.0",
     "@types/lodash": "^4.14.176",
     "@types/node": "^12.11.1",

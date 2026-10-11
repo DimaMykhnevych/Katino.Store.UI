@@ -282,4 +282,37 @@ describe('CartService', () => {
     httpMock.expectOne(cartUrl).flush(cart([item('1')], { cartToken: 'guest-new' }));
     expect(state.cart.items?.length).toBe(1);
   });
+  it('reuses a GET already on its way instead of sending a second one', () => {
+    localStorage.setItem(StorageKeys.CartToken, 'guest');
+    create();
+
+    // App start sent a GET; the cart page asks again before it is answered.
+    service.load();
+    httpMock.expectOne(cartUrl).flush(cart([item('1')]));
+    expect(state.cart.items?.length).toBe(1);
+
+    // Once answered, a new load() goes to the server again.
+    service.load();
+    httpMock.expectOne(cartUrl).flush(cart([item('1')]));
+  });
+
+  it('reloads the cart when another tab logs in as a different customer', () => {
+    localStorage.setItem(StorageKeys.CustomerToken, 'token-a');
+    localStorage.setItem(StorageKeys.CustomerEmail, 'a@example.com');
+    create();
+    const first = httpMock.expectOne(cartUrl);
+
+    // The other tab writes the new token, then the new email.
+    localStorage.setItem(StorageKeys.CustomerToken, 'token-b');
+    localStorage.setItem(StorageKeys.CustomerEmail, 'b@example.com');
+    window.dispatchEvent(new StorageEvent('storage', { key: StorageKeys.CustomerEmail }));
+
+    const second = httpMock.expectOne(cartUrl);
+    expect(second.request.headers.get('Authorization')).toBe('Bearer token-b');
+    second.flush(cart([], { cartToken: null }));
+    // The answer for the previous customer arrives late and is ignored.
+    first.flush(cart([item('a-line')], { cartToken: null }));
+
+    expect(state.cart.items).toEqual([]);
+  });
 });

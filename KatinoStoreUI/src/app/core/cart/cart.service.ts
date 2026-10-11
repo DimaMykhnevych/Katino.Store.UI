@@ -17,6 +17,7 @@ import {
   debounceTime,
   distinctUntilChanged,
   filter,
+  finalize,
   groupBy,
   map,
   mergeMap,
@@ -90,6 +91,8 @@ export class CartService implements OnDestroy {
   // Only a response to a request sent later than the applied one may replace the cart.
   private _requestSeq = 0;
   private _appliedSeq = 0;
+  // The GET on its way, if any. A second load() right after it (app start, then the cart page) reuses it.
+  private _inflightGetSeq: number | null = null;
   private _pendingExpiry: number | null = null;
   private _lastExpiryRefetchAt: number | null = null;
 
@@ -134,12 +137,25 @@ export class CartService implements OnDestroy {
       return;
     }
 
+    // Nothing was sent after the GET in flight, so its answer is as fresh as a new one would be.
+    if (this._inflightGetSeq === this._requestSeq) {
+      return;
+    }
+
     const seq = ++this._requestSeq;
+    this._inflightGetSeq = seq;
     this._patchState({ loading: true });
 
     this._http
       .get<Cart>(this._cartUrl)
-      .pipe(takeUntil(this._destroy$))
+      .pipe(
+        finalize(() => {
+          if (this._inflightGetSeq === seq) {
+            this._inflightGetSeq = null;
+          }
+        }),
+        takeUntil(this._destroy$),
+      )
       .subscribe({
         next: (cart) => {
           this._applyCart(cart, seq);
@@ -226,9 +242,14 @@ export class CartService implements OnDestroy {
     this._state$.next({ ...this._state, ...patch });
   }
 
-  private _resetToEmpty(): void {
-    this._requestSeq++;
+  // Responses to requests already sent belong to the previous identity (or state): never apply them.
+  private _dropResponsesInFlight(): void {
     this._appliedSeq = this._requestSeq;
+    this._inflightGetSeq = null;
+  }
+
+  private _resetToEmpty(): void {
+    this._dropResponsesInFlight();
     this._patchState({
       cart: createEmptyCart(),
       loaded: true,
@@ -252,7 +273,7 @@ export class CartService implements OnDestroy {
       });
     }
 
-    if (seq < this._appliedSeq) {
+    if (seq <= this._appliedSeq) {
       return;
     }
     this._appliedSeq = seq;
@@ -416,14 +437,19 @@ export class CartService implements OnDestroy {
   private _listenToAuth(): void {
     this._auth.state$
       .pipe(
+        // The email changes alone when another tab logs in as a different customer.
         distinctUntilChanged(
           (a, b) =>
             a.isLoggedIn === b.isLoggedIn &&
-            a.sessionExpired === b.sessionExpired,
+            a.sessionExpired === b.sessionExpired &&
+            a.email === b.email,
         ),
         takeUntil(this._destroy$),
       )
-      .subscribe(() => this.load());
+      .subscribe(() => {
+        this._dropResponsesInFlight();
+        this.load();
+      });
   }
 
   // Coming back to the tab, or another tab creating/dropping the guest cart, refetches the cart.
