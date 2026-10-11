@@ -267,7 +267,21 @@ export class CartService implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe({
-        // On success the line is back in the cart, which drops it from the expired list.
+        // On success the line is back in the cart, which drops it from the expired list. If this answer
+        // lost the race to a newer one that was sent before the add reached the server, the cart shown
+        // still lacks the line: ask again rather than keep it greyed out until the next refetch.
+        next: (cart) => {
+          const variantId = item.productVariantId;
+          const inCart = (cart.items ?? []).some(
+            (i) => i.productVariantId === variantId,
+          );
+          const stillExpired = this._state.expiredItems.some(
+            (i) => i.productVariantId === variantId,
+          );
+          if (inCart && stillExpired) {
+            this.load();
+          }
+        },
         error: (error: ApiError) => {
           if (error.status === 401) {
             return;

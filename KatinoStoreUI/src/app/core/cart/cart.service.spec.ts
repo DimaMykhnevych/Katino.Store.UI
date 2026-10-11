@@ -247,6 +247,27 @@ describe('CartService', () => {
     expect(state.cart.items?.map((i) => i.id)).toEqual(['new']);
   });
 
+  it('refetches when adding an expired line again loses the race to a newer GET', () => {
+    const expired = item('old', 3);
+    createWithCart(cart([], { removedExpiredItems: [expired] }));
+
+    service.readd(expired);
+    const add = httpMock.expectOne(`${cartUrl}/items`);
+    // A GET (e.g. on focus) leaves after the POST but is handled by the server before it.
+    service.load();
+    httpMock.expectOne(cartUrl).flush(cart([]));
+    add.flush(cart([item('new', 3, { productVariantId: 'v-old' })]));
+
+    // The add's answer is stale, so the line would stay greyed out without a new GET.
+    expect(state.expiredItems).toEqual([expired]);
+    httpMock
+      .expectOne(cartUrl)
+      .flush(cart([item('new', 3, { productVariantId: 'v-old' })]));
+
+    expect(state.expiredItems).toEqual([]);
+    expect(state.cart.items?.map((i) => i.id)).toEqual(['new']);
+  });
+
   it('shows why adding an expired line again failed, on that line', () => {
     const expired = item('old');
     createWithCart(cart([], { removedExpiredItems: [expired] }));
