@@ -157,15 +157,21 @@ export class CartService implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe({
+        // A dropped GET (identity changed while it was on its way) must not touch the loading flags:
+        // the GET that replaced it owns them. finalize runs after these, so the seq is still set here.
         next: (cart) => {
           this._applyCart(cart, seq);
-          this._patchState({ loading: false, loadFailed: false });
+          if (this._inflightGetSeq === seq) {
+            this._patchState({ loading: false, loadFailed: false });
+          }
         },
         error: (error: unknown) => {
-          this._patchState({
-            loading: false,
-            loadFailed: parseApiError(error).status !== 401,
-          });
+          if (this._inflightGetSeq === seq) {
+            this._patchState({
+              loading: false,
+              loadFailed: parseApiError(error).status !== 401,
+            });
+          }
         },
       });
   }

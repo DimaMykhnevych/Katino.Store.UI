@@ -315,4 +315,41 @@ describe('CartService', () => {
 
     expect(state.cart.items).toEqual([]);
   });
+
+  it('keeps the loading flags owned by the GET that replaced a dropped one', () => {
+    localStorage.setItem(StorageKeys.CustomerToken, 'token-a');
+    localStorage.setItem(StorageKeys.CustomerEmail, 'a@example.com');
+    create();
+    const dropped = httpMock.expectOne(cartUrl);
+
+    localStorage.setItem(StorageKeys.CustomerToken, 'token-b');
+    localStorage.setItem(StorageKeys.CustomerEmail, 'b@example.com');
+    window.dispatchEvent(new StorageEvent('storage', { key: StorageKeys.CustomerEmail }));
+    const current = httpMock.expectOne(cartUrl);
+
+    // The dropped GET answering first does not end the loading of the current one.
+    dropped.flush(cart([item('a-line')], { cartToken: null }));
+    expect(state.loading).toBeTrue();
+
+    current.flush(cart([item('b-line')], { cartToken: null }));
+    expect(state.loading).toBeFalse();
+    expect(state.cart.items?.map((i) => i.id)).toEqual(['b-line']);
+  });
+
+  it('does not report a load failure for a dropped GET that fails late', () => {
+    localStorage.setItem(StorageKeys.CustomerToken, 'token-a');
+    localStorage.setItem(StorageKeys.CustomerEmail, 'a@example.com');
+    create();
+    const dropped = httpMock.expectOne(cartUrl);
+
+    localStorage.setItem(StorageKeys.CustomerToken, 'token-b');
+    localStorage.setItem(StorageKeys.CustomerEmail, 'b@example.com');
+    window.dispatchEvent(new StorageEvent('storage', { key: StorageKeys.CustomerEmail }));
+
+    httpMock.expectOne(cartUrl).flush(cart([item('b-line')], { cartToken: null }));
+    dropped.flush(null, { status: 500, statusText: 'Server Error' });
+
+    expect(state.loadFailed).toBeFalse();
+    expect(state.cart.items?.map((i) => i.id)).toEqual(['b-line']);
+  });
 });
